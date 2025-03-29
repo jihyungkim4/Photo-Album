@@ -1,4 +1,5 @@
 package com.example.model;
+
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -20,6 +21,14 @@ public class Library implements Serializable {
         return userFile;
     }
 
+    public ArrayList<String> getUserNames() {
+        ArrayList<String> result = new ArrayList<String>();
+        for (UserFile userFile : userFiles) {
+            result.add(userFile.username);
+        }
+        return result;
+    }
+
     static public Library load(String path) throws ClassNotFoundException, IOException {
         // if file exists - open it otherwise create a new file
         // and add a single "stock" user to it
@@ -28,7 +37,7 @@ public class Library implements Serializable {
         if (Files.exists(fpath)) {
             try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(path))) {
                 Library library = (Library) in.readObject();
-                return library;    
+                return library;
             } catch (IOException e) {
                 e.printStackTrace();
                 return null;
@@ -40,11 +49,11 @@ public class Library implements Serializable {
             return library;
         }
     }
-    
+
     public static User loadUser(String path) throws ClassNotFoundException, IOException {
         try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(path))) {
             return (User) in.readObject();
-  
+
         } catch (IOException e) {
             e.printStackTrace();
             return null;
@@ -58,5 +67,5 @@ public class Library implements Serializable {
             e.printStackTrace();
         }
 
-    }      
+    }
 }

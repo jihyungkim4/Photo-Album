@@ -16,10 +16,13 @@ import javafx.stage.Stage;
  */
 public class App extends Application {
     private static Scene scene;
+    public static Library library;
+    public static UserFile userFile;
+    public static User user;
 
     @Override
     public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("albumLayout"), 640, 480);
+        scene = new Scene(loadFXML("login"), 640, 480);
         stage.setScene(scene);
         stage.show();
     }
@@ -34,6 +37,19 @@ public class App extends Application {
     }
 
     public static void main(String[] args) {
+        try {
+            App.library = Library.load("library.dat");
+            // for (int i = 0; i < library.userFiles.size(); i++) {
+            // UserFile userFile = library.userFiles.get(i);
+            // System.out.println(userFile.username + " " + userFile.path);
+            // if (userFile.username.equals("stock")) {
+            // User user = Library.loadUser(userFile.path);
+            // // use the library here
+            // userFile.save();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         launch();
     }
 }
