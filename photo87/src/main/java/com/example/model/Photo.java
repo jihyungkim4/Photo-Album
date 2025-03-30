@@ -13,6 +13,7 @@ import java.io.Serializable;
 
 public class Photo implements Serializable{
 
+    String caption;
     String path;
     Instant fileTime;
     ArrayList<Tag> tags;
@@ -25,5 +26,29 @@ public class Photo implements Serializable{
         thumbnail = new Thumbnail();
         fileTime = Files.getLastModifiedTime(Paths.get(path)).toInstant();
         albumCounter = 0;
+    }
+
+    public String getCaption() {
+        return caption;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public Instant getFileTime() {
+        return fileTime;
+    }
+
+    public ArrayList<Tag> getTags() {
+        return tags;
+    }
+
+    public Thumbnail getThumbnail() {
+        return thumbnail;
+    }
+
+    public int getAlbumCounter() {
+        return albumCounter;
     }
 }

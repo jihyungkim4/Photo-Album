@@ -37,63 +37,31 @@
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.SeparatorMenuItem?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.TilePane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<VBox minHeight="400.0" minWidth="500.0" prefHeight="457.0" prefWidth="710.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.PrimaryController">
+<VBox minHeight="400.0" minWidth="500.0" prefHeight="457.0" prefWidth="710.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.AlbumController">
   <children>
-    <MenuBar VBox.vgrow="NEVER">
-      <menus>
-        <Menu mnemonicParsing="false" text="File">
-          <items>
-            <MenuItem mnemonicParsing="false" text="New" />
-            <MenuItem mnemonicParsing="false" text="Open…" />
-            <Menu mnemonicParsing="false" text="Open Recent" />
-            <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" text="Close" />
-            <MenuItem mnemonicParsing="false" text="Save" />
-            <MenuItem mnemonicParsing="false" text="Save As…" />
-            <MenuItem mnemonicParsing="false" text="Revert" />
-            <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" text="Preferences…" />
-            <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" text="Quit" />
-          </items>
-        </Menu>
-        <Menu mnemonicParsing="false" text="Edit">
-          <items>
-            <MenuItem mnemonicParsing="false" text="Undo" />
-            <MenuItem mnemonicParsing="false" text="Redo" />
-            <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" text="Cut" />
-            <MenuItem mnemonicParsing="false" text="Copy" />
-            <MenuItem mnemonicParsing="false" text="Paste" />
-            <MenuItem mnemonicParsing="false" text="Delete" />
-            <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" text="Select All" />
-            <MenuItem mnemonicParsing="false" text="Unselect All" />
-          </items>
-        </Menu>
-        <Menu mnemonicParsing="false" text="Help">
-          <items>
-            <MenuItem mnemonicParsing="false" text="About MyHelloApp" />
-          </items>
-        </Menu>
-      </menus>
-    </MenuBar>
+      <AnchorPane prefHeight="38.0" prefWidth="710.0">
+         <children>
+            <Label layoutX="14.0" layoutY="10.0" prefHeight="17.0" prefWidth="412.0" text="Label">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Button layoutX="650.0" layoutY="6.0" mnemonicParsing="false" text="Back" />
+         </children>
+      </AnchorPane>
     <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="406.0" prefWidth="703.0" VBox.vgrow="ALWAYS">
          <children>
             <SplitPane dividerPositions="0.6061715481171549" prefHeight="375.0" prefWidth="640.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -138,13 +106,9 @@
                                  </children>
                               </VBox>
                               <ScrollPane hbarPolicy="NEVER" prefHeight="305.0" prefWidth="403.0" VBox.vgrow="ALWAYS">
-                                <content>
-                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="305.0" prefWidth="423.0">
-                                       <children>
-                                          <FlowPane layoutY="-38.0" prefHeight="305.0" prefWidth="425.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                                       </children>
-                                    </AnchorPane>
-                                </content>
+                                 <content>
+                                    <TilePane fx:id="photos" />
+                                 </content>
                               </ScrollPane>
                               <HBox prefHeight="46.0" prefWidth="425.0" spacing="10.0" VBox.vgrow="NEVER">
                                  <children>
@@ -173,7 +137,7 @@
                      <children>
                         <VBox prefHeight="429.0" prefWidth="276.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <children>
-                              <ImageView fitHeight="236.0" fitWidth="276.0" pickOnBounds="true" preserveRatio="true" VBox.vgrow="ALWAYS">
+                              <ImageView fx:id="photoView" fitHeight="236.0" fitWidth="276.0" pickOnBounds="true" preserveRatio="true" VBox.vgrow="ALWAYS">
                                  <VBox.margin>
                                     <Insets bottom="10.0" />
                                  </VBox.margin>

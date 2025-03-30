@@ -6,6 +6,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
+import javafx.stage.WindowEvent;
 
 public class LoginController {
 
@@ -20,11 +21,19 @@ public class LoginController {
 
     @FXML
     private void loginUser() throws IOException {
-        App.setRoot("secondary");
+        String selectedItem = userList.getSelectionModel().getSelectedItem();
+        if (selectedItem == null) {
+            return;
+        }
+        if (selectedItem.equals("admin")) {
+            App.setRoot("admin");
+        } else {
+            App.login(selectedItem);
+        }
     }
 
     @FXML
     private void exit() throws IOException {
-        System.out.println("New Album Pressed");
+        App.stage.fireEvent(new WindowEvent(App.stage, WindowEvent.WINDOW_CLOSE_REQUEST));
     }
 }

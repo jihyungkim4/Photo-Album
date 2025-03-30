@@ -24,6 +24,14 @@ public class Album implements Serializable {
         albumPhotos.add(albumPhoto);
     }
 
+    public String getName() {
+        return albumName;
+    }
+
+    public ArrayList<AlbumPhoto> getPhotos() {
+        return albumPhotos;
+    }
+
     public void removePhoto(Photo photo) {
         
 

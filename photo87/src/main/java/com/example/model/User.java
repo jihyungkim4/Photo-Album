@@ -24,6 +24,10 @@ public class User implements Serializable {
 
     }
 
+    public ArrayList<Album> getAlbums() {
+        return albums;
+    }
+
     public Album createAlbumFromPhotos(String albumName, ArrayList<Photo> photos) {
         Album album = new Album(albumName, photos);
         albums.add(album);

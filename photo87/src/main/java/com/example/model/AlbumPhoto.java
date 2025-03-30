@@ -10,5 +10,13 @@ public class AlbumPhoto implements Serializable {
         this.index = index;
         photo.albumCounter++;
     }
+
+    public Photo getPhoto() {
+        return photo;
+    }
+
+    public int getIndex() {
+        return index;
+    }
     
 }

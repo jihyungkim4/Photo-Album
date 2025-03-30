@@ -21,11 +21,31 @@ public class Library implements Serializable {
         return userFile;
     }
 
+    public void deleteUserFile(String username) {
+        for (int i = 0; i < userFiles.size(); i++) {
+            UserFile userFile = userFiles.get(i);
+            if (userFile.username.equals(username)) {
+                Path path = Paths.get(userFile.path);
+                if (Files.exists(path)) {
+                    try {
+                        Files.delete(path);
+                        System.out.println(path + " deleted.");
+                    } catch (IOException e) {
+                        System.out.println("Error deleting file: " + e.getMessage());
+                    } 
+                } 
+                userFiles.remove(i);
+                return;
+            }
+        } 
+    }
+
     public ArrayList<String> getUserNames() {
         ArrayList<String> result = new ArrayList<String>();
         for (UserFile userFile : userFiles) {
             result.add(userFile.username);
         }
+        result.add("admin");
         return result;
     }
 
@@ -60,12 +80,12 @@ public class Library implements Serializable {
         }
     }
 
-    void save(String path) {
-        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("person.ser"))) {
+    public void save(String path) throws IOException {
+        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(path))) {
             out.writeObject(this);
         } catch (IOException e) {
             e.printStackTrace();
+            throw e;
         }
-
     }
 }

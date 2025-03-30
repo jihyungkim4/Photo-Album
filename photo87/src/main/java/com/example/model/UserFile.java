@@ -29,12 +29,12 @@ public class UserFile implements Serializable {
         }
     }
 
-    public void save() {
+    public void save(User user) throws IOException {
         try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(path))) {
-            out.writeObject(this);
+            out.writeObject(user);
         } catch (IOException e) {
             e.printStackTrace();
+            throw e;
         }
-
     }      
 }

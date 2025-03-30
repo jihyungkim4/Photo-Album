@@ -3,11 +3,16 @@ package com.example;
 import java.io.IOException;
 import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
+import java.util.Optional;
+
 import com.example.model.*;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
 
 /**
@@ -17,13 +22,32 @@ import javafx.stage.Stage;
 public class App extends Application {
     private static Scene scene;
     public static Library library;
+    private static String libraryFile = "library.dat";
     public static UserFile userFile;
+    public static Stage stage;
     public static User user;
+    public static Album currentAlbum;
 
     @Override
     public void start(Stage stage) throws IOException {
+        this.stage = stage;
         scene = new Scene(loadFXML("login"), 640, 480);
         stage.setScene(scene);
+
+        stage.setOnCloseRequest(event -> {
+            Alert alert = new Alert(AlertType.CONFIRMATION);
+            alert.setTitle("Exit Confirmation");
+            alert.setHeaderText("You're about to exit");
+            alert.setContentText("Are you sure you want to exit?");
+
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.isEmpty() || result.get() != ButtonType.OK) {
+                // Cancel the close request
+                event.consume();
+            } else {
+                App.save();
+            }
+        });
         stage.show();
     }
 
@@ -36,9 +60,52 @@ public class App extends Application {
         return fxmlLoader.load();
     }
 
+    public static void login(String username) throws IOException {
+        // clear current user file
+        userFile = null;
+
+        for (UserFile file : library.userFiles) {
+            if (file.username.equals(username)) {
+                userFile = file;
+                break;
+            }
+        }
+
+        if (userFile == null) {
+            System.out.println("User not found" + username);
+            return;
+        }
+
+        try {
+            user = Library.loadUser(userFile.path);
+            setRoot("userAlbums");
+        }
+        catch(Exception e) {
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
+            System.out.println(e.getStackTrace());
+        }
+    }
+
+    private static void save() {
+        try {
+            library.save(libraryFile);
+            if (userFile != null && user != null) {
+                userFile.save(user);
+            } 
+        } catch (IOException e) {
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setTitle("ERROR");
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
+            e.printStackTrace();
+        }
+    }
+
     public static void main(String[] args) {
         try {
-            App.library = Library.load("library.dat");
+            App.library = Library.load(libraryFile);
             // for (int i = 0; i < library.userFiles.size(); i++) {
             // UserFile userFile = library.userFiles.get(i);
             // System.out.println(userFile.username + " " + userFile.path);

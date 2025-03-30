@@ -72,12 +72,12 @@
                         </ScrollPane>
                         <HBox prefHeight="100.0" prefWidth="200.0" spacing="7.0">
                            <children>
-                              <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="68.0" text="Login">
+                              <Button alignment="TOP_CENTER" mnemonicParsing="false" onAction="#loginUser" prefHeight="25.0" prefWidth="68.0" text="Login">
                                  <HBox.margin>
                                     <Insets left="30.0" />
                                  </HBox.margin>
                               </Button>
-                              <Button alignment="TOP_CENTER" mnemonicParsing="false" prefHeight="25.0" prefWidth="68.0" text="Exit">
+                              <Button alignment="TOP_CENTER" mnemonicParsing="false" onAction="#exit" prefHeight="25.0" prefWidth="68.0" text="Exit">
                                  <HBox.margin>
                                     <Insets left="110.0" />
                                  </HBox.margin>
