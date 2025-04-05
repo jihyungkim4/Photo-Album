@@ -1,6 +1,9 @@
 package com.example.model;
+import java.io.File;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Album implements Serializable {
     String albumName;
@@ -22,6 +25,15 @@ public class Album implements Serializable {
     public void addPhoto(Photo photo) {
         AlbumPhoto albumPhoto = new AlbumPhoto(photo, albumPhotos.size());
         albumPhotos.add(albumPhoto);
+    }
+
+    public void addPhotos(List<File> photoFiles) throws IOException {
+        for (File file : photoFiles) {
+            Photo photo = new Photo(file.getAbsolutePath());
+            System.out.print("Adding: " + file.getAbsolutePath());
+            AlbumPhoto albumPhoto = new AlbumPhoto(photo, albumPhotos.size());
+            albumPhotos.add(albumPhoto);
+        }
     }
 
     public String getName() {

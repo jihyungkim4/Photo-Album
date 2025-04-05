@@ -103,6 +103,14 @@ public class App extends Application {
         }
     }
 
+    public static void logOut() throws IOException {
+        App.save();
+        userFile = null;
+        user = null;
+        currentAlbum = null;
+        App.setRoot("login");
+    }
+
     public static void main(String[] args) {
         try {
             App.library = Library.load(libraryFile);

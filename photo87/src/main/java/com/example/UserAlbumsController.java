@@ -20,6 +20,7 @@ public class UserAlbumsController {
 
     private VBox currentSelection;
     private Album currentAlbum;
+    
     @FXML
     private Label albumName;
 
@@ -40,7 +41,7 @@ public class UserAlbumsController {
 
     @FXML
     private void initialize() {
-        populateAlbums();
+        populateAlbums(); 
     }
 
     @FXML
@@ -49,8 +50,8 @@ public class UserAlbumsController {
     }
 
     @FXML
-    void logOut(ActionEvent event) {
-
+    void logOut(ActionEvent event) throws IOException {
+        App.logOut();
     }
 
     @FXML
@@ -81,9 +82,6 @@ public class UserAlbumsController {
             }
             
         }
-
-        
-
        
     }
 
@@ -97,7 +95,8 @@ public class UserAlbumsController {
     }
 
     @FXML
-    void search(ActionEvent event) {
+    void search(ActionEvent event) throws IOException {
+        App.setRoot("albumLayout");
 
     }
 
