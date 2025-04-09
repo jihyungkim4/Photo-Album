@@ -37,7 +37,7 @@ public class User implements Serializable {
     }
 
     public void deleteAlbum(Album album) {
-        
+        albums.remove(album);
     }
 
 

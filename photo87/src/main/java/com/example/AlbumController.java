@@ -8,7 +8,9 @@ import java.util.List;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
@@ -19,14 +21,18 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
 public class AlbumController {
 
     private VBox currentSelection;
     private AlbumPhoto currentPhoto;
+    private int currentImageIndex = 0;
+    private Stage slideshowStage;
     
     @FXML
     private TilePane photos;
@@ -36,6 +42,18 @@ public class AlbumController {
 
     @FXML
     private Label albumName;
+
+    @FXML
+    private TextField albumDescription;
+
+    @FXML
+    private Button saveDescriptionButton;
+
+    @FXML
+    private Button editDescriptionButton;
+
+    @FXML
+    private Button slideshowButton;
 
     @FXML
     private GridPane searchPanel;
@@ -92,6 +110,7 @@ public class AlbumController {
         } else {
             // album mode
             albumName.setText(App.currentAlbum.getName());
+            albumDescription.setText(App.currentAlbum.getDescription());
             enableElement(searchPanel, false);
             populatePictures();
         }
@@ -118,6 +137,23 @@ public class AlbumController {
         }
     }
 
+    @FXML
+    private void editDescription(ActionEvent event) {
+        albumDescription.setEditable(true);
+        saveDescriptionButton.setVisible(true);
+        editDescriptionButton.setVisible(false);
+        System.out.println("Editing");
+    }
+
+    @FXML
+    private void saveDescription(ActionEvent event) {
+        App.currentAlbum.setDescription(albumDescription.getText());
+        App.saveUsers();
+        albumDescription.setEditable(false);
+        saveDescriptionButton.setVisible(false);
+        editDescriptionButton.setVisible(true);
+        System.out.println("Saved");
+    }
 
     @FXML
     private void dateSearchSelected() {
@@ -238,5 +274,52 @@ public class AlbumController {
         });
 
         tilePane.getChildren().add(container);
+    }
+
+    public void startSlideshow() {
+        slideshowStage = new Stage();
+        slideshowStage.setTitle("Slideshow");
+
+        VBox slideshowLayout = new VBox(10);
+        slideshowLayout.setAlignment(Pos.CENTER);
+
+        ImageView slideshowImageView = new ImageView();
+        slideshowImageView.setFitWidth(600);
+        slideshowImageView.setFitHeight(400);
+        slideshowImageView.setPreserveRatio(true);
+
+        Button previousButton = new Button("Previous");
+        Button nextButton = new Button("Next");
+        showSlideshowPhoto(slideshowImageView, currentImageIndex);
+
+        previousButton.setOnAction(e -> {
+            if (currentImageIndex > 0) {
+                currentImageIndex--;
+                showSlideshowPhoto(slideshowImageView, currentImageIndex);
+            }
+        });
+
+        nextButton.setOnAction(e -> {
+            if (currentImageIndex < App.currentAlbum.getPhotos().size() - 1) {
+                currentImageIndex++;
+                showSlideshowPhoto(slideshowImageView, currentImageIndex);
+            }
+        });
+
+        HBox buttonBox = new HBox(20);
+        buttonBox.setAlignment(Pos.CENTER);
+        buttonBox.getChildren().addAll(previousButton, nextButton);
+        slideshowLayout.getChildren().addAll(slideshowImageView, buttonBox);
+
+        Scene slideshowScene = new Scene(slideshowLayout, 800, 600);
+        slideshowStage.setScene(slideshowScene);
+        slideshowStage.show();
+    }
+
+    private void showSlideshowPhoto(ImageView imageView, int index) {
+        AlbumPhoto photo = App.currentAlbum.getPhotos().get(index);
+        String imagePath = photo.getPhoto().getPath();
+        Image image = new Image("file:" + imagePath);
+        imageView.setImage(image);
     }
 }
