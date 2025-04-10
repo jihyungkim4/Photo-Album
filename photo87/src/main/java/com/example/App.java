@@ -105,6 +105,10 @@ public class App extends Application {
         }
     }
 
+    public static void saveUsers(){
+        save();
+    }
+
     public static void logOut() throws IOException {
         App.save();
         userFile = null;

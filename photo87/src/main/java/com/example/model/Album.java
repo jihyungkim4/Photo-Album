@@ -7,15 +7,32 @@ import java.util.List;
 
 public class Album implements Serializable {
     String albumName;
+    String description;
     ArrayList<AlbumPhoto> albumPhotos;
 
     public Album(String albumName) {
         this.albumName = albumName;
+        this.description = "";
+        albumPhotos = new ArrayList<AlbumPhoto>();
+    }
+
+    public Album(String albumName, String description) {
+        this(albumName);
+        this.description = description;
         albumPhotos = new ArrayList<AlbumPhoto>();
     }
 
     public Album(String albumName, ArrayList<Photo> photos) {
         this(albumName);
+        this.description = "";
+        for (int i = 0; i < photos.size(); i++) {
+            AlbumPhoto albumPhoto = new AlbumPhoto(photos.get(i), i);
+            albumPhotos.add(albumPhoto);
+        }
+    }
+
+    public Album(String albumName, String description, ArrayList<Photo> photos) {
+        this(albumName, description);
         for (int i = 0; i < photos.size(); i++) {
             AlbumPhoto albumPhoto = new AlbumPhoto(photos.get(i), i);
             albumPhotos.add(albumPhoto);
@@ -42,6 +59,14 @@ public class Album implements Serializable {
 
     public ArrayList<AlbumPhoto> getPhotos() {
         return albumPhotos;
+    }
+
+    public String getDescription(){
+        return description;
+    }
+
+    public void setDescription(String description){
+        this.description = description;
     }
 
     public void removePhoto(Photo photo) {
