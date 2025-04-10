@@ -46,7 +46,6 @@
 <?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
@@ -55,7 +54,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox minHeight="400.0" minWidth="500.0" prefHeight="600.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.AlbumController">
+<VBox minHeight="400.0" minWidth="500.0" prefHeight="631.0" prefWidth="859.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.AlbumController">
   <children>
       <AnchorPane prefHeight="38.0" prefWidth="710.0">
          <children>
@@ -65,10 +64,10 @@
                </font>
             </Label>
             <Label layoutX="11.0" layoutY="35.0" text="Description:" />
-            <TextField fx:id="albumDescription" layoutX="100.0" layoutY="30.0" prefWidth="400.0" editable="false" />
+            <TextField fx:id="albumDescription" editable="false" layoutX="100.0" layoutY="30.0" prefWidth="400.0" />
             <Button fx:id="editDescriptionButton" layoutX="510.0" layoutY="30.0" mnemonicParsing="false" onAction="#editDescription" text="Edit" />
             <Button fx:id="saveDescriptionButton" layoutX="570.0" layoutY="30.0" mnemonicParsing="false" onAction="#saveDescription" text="Save" visible="false" />
-            <Button alignment="CENTER" layoutX="726.0" layoutY="7.0" mnemonicParsing="false" onAction="#backToAlbums" prefWidth="50.0" text="Back" AnchorPane.bottomAnchor="6.0" AnchorPane.rightAnchor="74.0" />
+            <Button alignment="CENTER" layoutX="726.0" layoutY="7.0" mnemonicParsing="false" onAction="#backToAlbums" prefWidth="50.0" text="Back" AnchorPane.rightAnchor="74.0" />
             <Button layoutX="788.0" layoutY="7.0" mnemonicParsing="false" onAction="#logOut" text="Logout" AnchorPane.rightAnchor="8.0" />
          </children>
       </AnchorPane>
@@ -174,19 +173,24 @@
                   </AnchorPane>
                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="395.0" prefWidth="274.0">
                         <children>
-                        <BorderPane fx:id="borderPane" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                           <bottom>
-                                 <VBox alignment="CENTER" prefHeight="178.0" prefWidth="276.0" BorderPane.alignment="CENTER">
+                        <VBox id="topBox" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <children>
+                              <HBox fx:id="topBox" alignment="CENTER" VBox.vgrow="ALWAYS">
+                                 <children>
+                                       <ImageView fx:id="photoView" fitHeight="381.0" fitWidth="306.0" pickOnBounds="true" preserveRatio="true" style="-fx-border-color: black; -fx-border-width: 2;" />
+                                 </children>
+                              </HBox>
+                                 <VBox alignment="CENTER" prefHeight="202.0" prefWidth="314.0" VBox.vgrow="NEVER">
                                     <children>
                                        <GridPane hgap="10" vgap="10" VBox.vgrow="NEVER">
                                           <children>
                                              <!-- Row 1 -->
                                              <Label alignment="CENTER_RIGHT" text="Date" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-                                             <TextField prefWidth="180" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                                             <TextField fx:id="dateBox" prefWidth="180" GridPane.columnIndex="1" GridPane.rowIndex="0" />
       
                                              <!-- Row 2 -->
                                              <Label alignment="CENTER_RIGHT" text="Caption" GridPane.columnIndex="0" GridPane.rowIndex="1" />
-                                             <TextField prefWidth="180" GridPane.columnIndex="1" GridPane.hgrow="NEVER" GridPane.rowIndex="1" />
+                                             <TextField fx:id="captionBox" prefWidth="180" GridPane.columnIndex="1" GridPane.hgrow="NEVER" GridPane.rowIndex="1" />
                                           </children>
                                           <columnConstraints>
                                              <ColumnConstraints halignment="RIGHT" />
@@ -206,8 +210,8 @@
                                                 <children>
                                                    <VBox alignment="CENTER" prefHeight="96.0" prefWidth="94.0" spacing="5.0">
                                                       <children>
-                                                         <Button mnemonicParsing="false" text="Delete" />
-                                                         <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="51.0" text="Edit" />
+                                                         <Button fx:id="deleteTag" mnemonicParsing="false" text="Delete" />
+                                                         <Button fx:id="editTag" mnemonicParsing="false" prefHeight="25.0" prefWidth="51.0" text="Edit" />
                                                          <Button fx:id="newTag" mnemonicParsing="false" onAction="#openTagDialog" prefHeight="25.0" prefWidth="53.0" text="New" />
                                                       </children>
                                                    </VBox>
@@ -234,16 +238,12 @@
                                           </VBox.margin>
                                        </VBox>
                                     </children>
+                                 <padding>
+                                    <Insets top="10.0" />
+                                 </padding>
                                  </VBox>
-                           </bottom>
-                           <top>
-                              <HBox fx:id="topBox" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-                                 <children>
-                                       <ImageView fx:id="photoView" fitHeight="381.0" fitWidth="306.0" pickOnBounds="true" preserveRatio="true" style="-fx-border-color: black; -fx-border-width: 2;" />
-                                 </children>
-                              </HBox>
-                           </top>
-                        </BorderPane>
+                           </children>
+                        </VBox>
                         </children>
                      </AnchorPane>
               </items>

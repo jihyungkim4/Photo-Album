@@ -54,6 +54,8 @@ public class App extends Application {
 
     static void setRoot(String fxml) throws IOException {
         scene.setRoot(loadFXML(fxml));
+        stage.setWidth(1000);  // Set the desired width
+        stage.setHeight(700); // Set the desired height
     }
 
     static Parent loadFXML(String fxml) throws IOException {

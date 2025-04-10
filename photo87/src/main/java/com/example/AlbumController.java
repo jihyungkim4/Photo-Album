@@ -25,6 +25,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
@@ -100,6 +101,18 @@ public class AlbumController {
     private Button newTag;
 
     @FXML
+    private TextField captionBox;
+
+    @FXML
+    private TextField dateBox;
+
+    @FXML
+    private Button deleteTag;
+
+    @FXML
+    private Button editTag;
+
+    @FXML
     private TableView<Tag> tagTableView;
 
     @FXML
@@ -131,6 +144,10 @@ public class AlbumController {
             albumName.setText(App.currentAlbum.getName());
             albumDescription.setText(App.currentAlbum.getDescription());
             enableElement(searchPanel, false);
+            // set tag buttons to disabled initially
+            newTag.setDisable(true);
+            editTag.setDisable(true);
+            deleteTag.setDisable(true);
             populatePictures();
         }
         
@@ -325,17 +342,44 @@ public class AlbumController {
                 if (currentSelection == container) {
                     currentSelection = null;
                     currentPhoto = null;
+                    newTag.setDisable(true);
+                    editTag.setDisable(true);
+                    deleteTag.setDisable(true);
+                    tagTableView.getItems().clear();
                     photoView.setImage(null);
                     return;
                 }
             }
             
             currentSelection = container;
-            Image displayImage = new Image("file:" + imagePath, container.getWidth(), container.getHeight(), true, true); // Resize as needed
+
+            VBox slideshowLayout = new VBox(10);
+            slideshowLayout.setAlignment(Pos.CENTER);
+
+            ImageView slideshowImageView = new ImageView();
+            slideshowImageView.setFitWidth(600);
+            slideshowImageView.setFitHeight(400);
+            slideshowImageView.setPreserveRatio(true);
+
+            Button previousButton = new Button("Previous");
+            Button nextButton = new Button("Next");
+            showSlideshowPhoto(slideshowImageView, currentImageIndex);
+
+            Image displayImage = new Image("file:" + imagePath);
             photoView.setImage(displayImage);
+            photoView.setPreserveRatio(true);
+            photoView.setFitWidth(container.getWidth());
+            photoView.setFitHeight(container.getHeight());
+            photoView.fitWidthProperty().bind(topBox.widthProperty());
+            photoView.fitHeightProperty().bind(topBox.heightProperty());
+            
             System.out.println("photoView: " + photoView.getImage().getWidth());
             System.out.println("Container: " + container.getWidth());
             currentPhoto = photo;
+            // javaFx button for edit/create/delete need to be enabled because a currentPhoto is selected.
+            newTag.setDisable(false);
+            editTag.setDisable(false);
+            deleteTag.setDisable(false);
             setupColumns();
             populateTags(currentPhoto);
 
