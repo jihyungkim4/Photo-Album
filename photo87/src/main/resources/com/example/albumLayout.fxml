@@ -203,13 +203,13 @@
                                                       <children>
                                                          <Button mnemonicParsing="false" text="Delete" />
                                                          <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="51.0" text="Edit" />
-                                                         <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="53.0" text="New" />
+                                                         <Button fx:id="newTag" mnemonicParsing="false" onAction="#openTagDialog" prefHeight="25.0" prefWidth="53.0" text="New" />
                                                       </children>
                                                    </VBox>
-                                                   <TableView prefHeight="96.0" prefWidth="148.0">
+                                                   <TableView fx:id="tagTableView" prefHeight="96.0" prefWidth="148.0">
                                                    <columns>
-                                                      <TableColumn prefWidth="68.6666898727417" text="Tag" />
-                                                      <TableColumn prefWidth="82.0000228881836" text="Value" />
+                                                      <TableColumn fx:id="tagTypeTable" prefWidth="68.6666898727417" text="Tag" />
+                                                      <TableColumn fx:id="tagValueTable" prefWidth="82.0000228881836" text="Value" />
                                                    </columns>
                                                       <HBox.margin>
                                                          <Insets />

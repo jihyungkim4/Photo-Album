@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.io.File;
 import java.io.FileInputStream;
 import java.util.ArrayList;
 
@@ -66,19 +67,19 @@ public class Library implements Serializable {
             // file does not exist
             Library library = new Library();
             library.createUserFile("stock");
+            library.save(path);
             return library;
         }
     }
-
+    
     public static User loadUser(String path) throws ClassNotFoundException, IOException {
         try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(path))) {
-            return (User) in.readObject();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
+                return (User) in.readObject();
+            } catch (IOException e) {
+                e.printStackTrace();
+                return null;
+            }
         }
-    }
 
     public void save(String path) throws IOException {
         try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(path))) {

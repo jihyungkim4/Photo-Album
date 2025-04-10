@@ -3,12 +3,16 @@ import com.example.model.*;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
@@ -22,6 +26,10 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 
 public class AlbumController {
 
@@ -43,7 +51,7 @@ public class AlbumController {
     @FXML
     private ImageView photoView;
 
-     @FXML
+    @FXML
     private BorderPane borderPane;
 
     @FXML
@@ -70,6 +78,17 @@ public class AlbumController {
     @FXML
     private TextField tagValue2;
 
+    @FXML
+    private Button newTag;
+
+    @FXML
+    private TableView<Tag> tagTableView;
+
+    @FXML
+    private TableColumn<Tag, String> tagTypeTable;
+
+    @FXML
+    private TableColumn<Tag, String> tagValueTable;
 
     @FXML
     private void initialize() {
@@ -104,18 +123,52 @@ public class AlbumController {
     }
 
     @FXML
+    private void openTagDialog() {
+         try {
+            // Load the FXML file for the Tag Dialog
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("newTag.fxml"));
+            Scene dialogScene = new Scene(loader.load());  // Load the scene from the FXML
+
+            NewTagController controller = loader.getController();
+            controller.setCurrentPhoto(currentPhoto);
+            controller.setAlbumController(this);
+            // Create a new Stage for the dialog (this will be a separate window)
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle("Create New Tag");
+            dialogStage.setScene(dialogScene);  // Set the scene to the dialog
+            dialogStage.initModality(Modality.APPLICATION_MODAL);  // Makes the dialog modal (blocks interaction with the main window)
+            dialogStage.showAndWait();  // Display the dialog and wait for the user to close it
+
+            
+        } catch (IOException e) {
+            e.printStackTrace();  // Handle exceptions (like file not found or I/O errors)
+        }
+    }
+    
+
+    @FXML
     void importPhotos(ActionEvent event) throws IOException {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Select Images to Import");
         fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg", "*.gif", "*.bmp"));
         List<File> selectedFiles = fileChooser.showOpenMultipleDialog(App.stage); // pass your Stage
-
+        
+        
+        //NewTagController controller = loader.getController();
+        //controller.setCurrentPhoto(currentPhoto); // Pass the selected photo here
         if (selectedFiles != null && !selectedFiles.isEmpty()) {
             App.currentAlbum.addPhotos(selectedFiles);
             populatePictures();
         } else {
             System.out.println("No files selected.");
         }
+    }
+
+    @FXML
+    private void initializeTagTable() {
+        List<Tag> currentTags = currentPhoto.getTags();
+
+
     }
 
 
@@ -162,6 +215,22 @@ public class AlbumController {
     private void backToAlbums() throws IOException {
         App.currentAlbum = null;
         App.setRoot("userAlbums");
+    }
+
+    public void setupColumns() {
+        // Set the cell value for the tag type (name of the tag)
+        tagTypeTable.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
+        
+        // Set the cell value for the tag value (value of the tag)
+        tagValueTable.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getValue()));
+    }
+
+    public void populateTags(AlbumPhoto currentPhoto) {
+    if (currentPhoto != null) {
+        List<Tag> tags = currentPhoto.getTags(); // Get the tags from the current photo
+        ObservableList<Tag> observableTags = FXCollections.observableArrayList(tags); // Convert to ObservableList
+        tagTableView.setItems(observableTags); // Set the items of the TableView
+        }
     }
     
     private void enableElement(Node element, boolean enable) {
@@ -233,6 +302,9 @@ public class AlbumController {
             System.out.println("photoView: " + photoView.getImage().getWidth());
             System.out.println("Container: " + container.getWidth());
             currentPhoto = photo;
+            setupColumns();
+            populateTags(currentPhoto);
+
             container.setStyle("-fx-padding: 10; -fx-alignment: center; -fx-background-color: #d0d0d0; -fx-border-color: #888; -fx-cursor: hand;");
             //albumName.setText("Album: " + label.getText()); 
         });

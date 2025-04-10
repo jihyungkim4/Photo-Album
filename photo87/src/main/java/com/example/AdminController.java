@@ -42,8 +42,7 @@ public class AdminController {
         } else {
             // create new user yay!!
             App.library.createUserFile(user);
-            populateUsers();
-            
+            populateUsers(); 
         }
 
     }
