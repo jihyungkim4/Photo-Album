@@ -17,54 +17,25 @@ import java.io.FileInputStream;
 
 public class TagIndex implements Serializable {
 
-    private Map<String, List<Tag>> tagMap;
+    public Map<String, List<AlbumPhoto>> tagNameIndex;
+    public Map<String, List<AlbumPhoto>> tagValueIndex;
 
     public TagIndex() {
-        tagMap = new HashMap<>();
-    }
-
-    // Add a tag to the index
-    public void addTag(Tag tag) {
-        tagMap.computeIfAbsent(tag.getName(), k -> new ArrayList<>()).add(tag);
-    }
-
-    // Save the TagIndex to a file
-    public void saveToFile(String filePath) throws IOException {
-        try (FileOutputStream fileOut = new FileOutputStream(filePath);
-             ObjectOutputStream out = new ObjectOutputStream(fileOut)) {
-            out.writeObject(this);
-        }
-    }
-
-    public static TagIndex loadFromFile(String filePath) throws IOException, ClassNotFoundException {
-        try (FileInputStream fileIn = new FileInputStream(filePath);
-             ObjectInputStream in = new ObjectInputStream(fileIn)) {
-            return (TagIndex) in.readObject();
-        }
+        tagNameIndex = new HashMap<>();
+        tagNameIndex = new HashMap<>();
     }
 
     // Get all tags for a specific name
-    // Get all tags for a specific name
-    public List<Tag> getTagsByName(String name) {
-        return tagMap.getOrDefault(name, Collections.emptyList());
-    }
+    // public List<Tag> getTagsByName(String name) {
+       
+    // }
 
     // Search for tags based on a name or value
-    public Set<Tag> searchTags(String query) {
-        Set<Tag> results = new HashSet<>();
-        for (List<Tag> tagList : tagMap.values()) {
-            for (Tag tag : tagList) {
-                if (tag.getValue().contains(query)) {
-                    results.add(tag);
-                }
-            }
-        }
-        return results;
-    }
+    // public Set<Tag> searchTags(String query) {
+    // }
     
     // Get all tags in the index
-    public Map<String, List<Tag>> getAllTags() {
-        return tagMap;
-    }
+    // public Map<String, List<Tag>> getAllTags() {
+    // }
 
 }

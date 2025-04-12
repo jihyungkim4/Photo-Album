@@ -2,9 +2,11 @@ package com.example;
 import com.example.model.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import com.example.model.AlbumPhoto;
 import com.example.model.Tag;
+import com.example.model.User;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -20,6 +22,7 @@ public class NewTagController {
     
     private AlbumPhoto currentPhoto;
     private AlbumController albumController;
+    private User currentUser;
 
     @FXML
     private Button cancelButton;
@@ -55,7 +58,11 @@ public class NewTagController {
             alert.setContentText("Tag description cannot be empty");
             alert.showAndWait();
         } else {
+            // Adds a tag to the currentPhoto which has its own list of tags
+            // Adds a tag to the globalIndex associated with that user, so that it may be searched for more easily.
             Tag newTag = new Tag(currentPhoto.getPhoto(), tagType, newTagName, false);
+            App.user.globalTagIndex.tagNameIndex.computeIfAbsent(newTagName, k -> new ArrayList<>()).add(currentPhoto);
+            App.user.globalTagIndex.tagNameIndex.computeIfAbsent(newTagName, k -> new ArrayList<>()).add(currentPhoto);
             currentPhoto.addTag(newTag);
             closePopup();
             albumController.populateTags(currentPhoto);

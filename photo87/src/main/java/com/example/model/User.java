@@ -7,14 +7,14 @@ public class User implements Serializable {
     ArrayList<Photo> photos;
     ArrayList<Album> albums;
     DateIndex dateIndex;
-    TagIndex tagIndex; //Global tagIndex for the user
+    public TagIndex globalTagIndex; //Global tagIndex for the user
 
     public User(String username) {
         this.username = username;
         photos = new ArrayList<Photo>();
         albums = new ArrayList<Album>();
         dateIndex = new DateIndex();
-        tagIndex = new TagIndex();
+        globalTagIndex = new TagIndex();
     }
 
     public Album createAlbum(String albumName) {

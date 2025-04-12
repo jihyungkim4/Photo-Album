@@ -1,4 +1,7 @@
 package com.example;
+import com.example.model.TagIndex;
+import com.example.model.Tag;
+
 import java.io.IOException;
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -29,6 +32,7 @@ public class UserAlbumsController {
 
     private VBox currentSelection;
     private Album currentAlbum;
+    
     
     @FXML
     private Label albumName;

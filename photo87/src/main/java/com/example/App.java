@@ -28,7 +28,6 @@ public class App extends Application {
     public static Stage stage;
     public static User user;
     public static Album currentAlbum;
-    private static TagIndex tagIndex;
 
     @Override
     public void start(Stage stage) throws IOException {
