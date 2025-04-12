@@ -43,7 +43,7 @@
                                           <Insets />
                                        </HBox.margin>
                                     </Button>
-                                    <Button mnemonicParsing="false" onAction="#modifyAlbum" text="Modify" />
+                                    <Button fx:id="modifyButton" mnemonicParsing="false" onAction="#modifyAlbum" text="Modify" />
                                     <Button mnemonicParsing="false" onAction="#newAlbum" text="New" />
                                     <Button mnemonicParsing="false" onAction="#deleteAlbum" text="Delete" />
                                     <Button mnemonicParsing="false" onAction="#search" text="Search" />

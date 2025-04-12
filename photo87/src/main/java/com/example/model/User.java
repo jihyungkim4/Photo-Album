@@ -28,6 +28,15 @@ public class User implements Serializable {
         return albums;
     }
 
+    public Album getAlbum(String name) {
+        for (Album album : getAlbums()) {
+            if (album.getName().equalsIgnoreCase(name)) {
+                return album;
+            }
+        }
+        return null;
+    }
+
     public Album createAlbumFromPhotos(String albumName, ArrayList<Photo> photos) {
         Album album = new Album(albumName, photos);
         albums.add(album);

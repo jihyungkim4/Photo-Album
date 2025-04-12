@@ -1,15 +1,22 @@
 package com.example;
 import java.io.IOException;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Optional;
 
 import com.example.model.Album;
+import com.example.model.AlbumPhoto;
+import com.example.model.Photo;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextInputDialog;
@@ -42,19 +49,17 @@ public class UserAlbumsController {
     private Label title;
 
     @FXML
+    private Button modifyButton;
+
+    @FXML
     private void initialize() {
         populateAlbums(); 
     }
 
     @FXML
     void deleteAlbum(ActionEvent event) {
-        // if (currentAlbum == null) {
-        //     System.out.println("No album selected to delete");
-        //     return;
-        // }
 
         if (currentAlbum == null) {
-            // If no album is selected, show an alert to the user
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("No Album Selected");
             alert.setHeaderText("Please select an album to delete.");
@@ -98,9 +103,56 @@ public class UserAlbumsController {
     }
 
     @FXML
-    void modifyAlbum(ActionEvent event) {
+    private void modifyAlbum(ActionEvent event) {
+        if (currentAlbum == null) {
+            showError("No album selected.");
+            return;
+        }
 
+        TextInputDialog nameDialog = new TextInputDialog(currentAlbum.getName());
+        nameDialog.setTitle("Modify Album");
+        nameDialog.setHeaderText("Edit Album Name");
+        nameDialog.setContentText("New name:");
+
+        Optional<String> nameResult = nameDialog.showAndWait();
+        if (nameResult.isEmpty()) return;
+        String newName = nameResult.get().trim();
+        if (newName.isEmpty()) {
+            showError("Name cannot be empty.");
+            return;
+        }
+
+        TextInputDialog descDialog = new TextInputDialog(currentAlbum.getDescription());
+        descDialog.setTitle("Modify Album");
+        descDialog.setHeaderText("Edit Album Description");
+        descDialog.setContentText("New description:");
+
+        Optional<String> descResult = descDialog.showAndWait();
+        if (descResult.isEmpty()) return;
+        String newDesc = descResult.get().trim();
+
+        if (!newName.equals(currentAlbum.getName()) &&
+            App.user.getAlbum(newName) != null) {
+            showError("Album name already exists.");
+            return;
+        }
+
+        currentAlbum.setName(newName);
+        currentAlbum.setDescription(newDesc);
+
+        albumName.setText("Name: " + currentAlbum.getName());
+        description.setText("Description: " + currentAlbum.getDescription());
+        App.saveUsers();
     }
+
+    private void showError(String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
 
     @FXML
     void newAlbum(ActionEvent event) {
@@ -181,8 +233,6 @@ public class UserAlbumsController {
     }
 
     public void addPhotoToTilePane(TilePane tilePane, String imagePath, String labelText) {
-        // Load image
-        // Image image = new Image("file:" + imagePath, 100, 100, true, true); // Resize as needed
         Image image = new Image(getClass().getResource(imagePath).toExternalForm());
 
         ImageView imageView = new ImageView(image);
@@ -192,10 +242,9 @@ public class UserAlbumsController {
 
         Label label = new Label(labelText);
 
-        VBox container = new VBox(5); // spacing between image and label
+        VBox container = new VBox(5);
         container.getChildren().addAll(imageView, label);
 
-        // Optional: set style for spacing/padding/background
         container.setStyle("-fx-padding: 10; -fx-alignment: center;");
 
         container.setOnMouseEntered(e -> {
@@ -227,6 +276,31 @@ public class UserAlbumsController {
             container.setStyle("-fx-padding: 10; -fx-alignment: center; -fx-background-color: #d0d0d0; -fx-border-color: #888; -fx-cursor: hand;");
             albumName.setText("Album: " + label.getText()); 
             description.setText("Description: " + currentAlbum.getDescription());
+
+            if (!currentAlbum.getPhotos().isEmpty()) {
+                Instant earliest = currentAlbum.getPhotos().get(0).getFileTime();
+                Instant latest = earliest;
+
+                for (AlbumPhoto ap : currentAlbum.getPhotos()) {
+                    Photo p = ap.getPhoto();
+                    Instant time = p.getFileTime();
+                    if (time.isBefore(earliest)) earliest = time;
+                    if (time.isAfter(latest)) latest = time;
+                }
+
+                // Convert to readable format
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM d yyyy");
+                LocalDateTime start = LocalDateTime.ofInstant(earliest, ZoneId.systemDefault());
+                LocalDateTime end = LocalDateTime.ofInstant(latest, ZoneId.systemDefault());
+                String startFormatted = start.format(formatter);
+                String endFormatted = end.format(formatter);
+
+                startDate.setText("Start Date: " + startFormatted);
+                endDate.setText("End Date: " + endFormatted);
+            } else {
+                startDate.setText("Start Date: ");
+                endDate.setText("End Date: ");
+            }
 
         });
 

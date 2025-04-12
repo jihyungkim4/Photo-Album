@@ -15,11 +15,13 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
@@ -306,6 +308,7 @@ public class AlbumController {
         }
     }
 
+    
     public void addPhotoToTilePane(TilePane tilePane, AlbumPhoto photo) {
         String imagePath = photo.getPhoto().getPath();
         String labelText = photo.getPhoto().getCaption();
@@ -368,6 +371,8 @@ public class AlbumController {
             Image displayImage = new Image("file:" + imagePath);
             photoView.setImage(displayImage);
             photoView.setPreserveRatio(true);
+            photoView.fitWidthProperty().unbind();
+            photoView.fitHeightProperty().unbind();
             photoView.setFitWidth(container.getWidth());
             photoView.setFitHeight(container.getHeight());
             photoView.fitWidthProperty().bind(topBox.widthProperty());
@@ -436,4 +441,6 @@ public class AlbumController {
         Image image = new Image("file:" + imagePath);
         imageView.setImage(image);
     }
+
+    
 }

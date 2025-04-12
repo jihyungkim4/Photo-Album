@@ -57,6 +57,10 @@ public class Album implements Serializable {
         return albumName;
     }
 
+    public void setName(String albumName) {
+        this.albumName = albumName;
+    }
+
     public ArrayList<AlbumPhoto> getPhotos() {
         return albumPhotos;
     }

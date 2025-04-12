@@ -1,5 +1,6 @@
 package com.example.model;
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,6 +33,11 @@ public class AlbumPhoto implements Serializable {
      // Get all tags for this photo
      public List<Tag> getTags() {
         return tags; // Return List<Tag> instead of Set<Tag>
+    }
+
+    // Get file time from the wrapped Photo
+    public Instant getFileTime() {
+        return photo.getFileTime();
     }
     
 }
