@@ -293,7 +293,7 @@ public class UserAlbumsController {
                 }
 
                 // Convert to readable format
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM d yyyy");
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M/d/yyyy");
                 LocalDateTime start = LocalDateTime.ofInstant(earliest, ZoneId.systemDefault());
                 LocalDateTime end = LocalDateTime.ofInstant(latest, ZoneId.systemDefault());
                 String startFormatted = start.format(formatter);

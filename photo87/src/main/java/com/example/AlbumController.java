@@ -3,6 +3,10 @@ import com.example.model.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import javafx.beans.property.SimpleStringProperty;
@@ -115,6 +119,9 @@ public class AlbumController {
     private Button editTag;
 
     @FXML
+    private Button editCaptionBtn;
+
+    @FXML
     private TableView<Tag> tagTableView;
 
     @FXML
@@ -125,6 +132,10 @@ public class AlbumController {
 
     @FXML
     private void initialize() {
+        //photoView.fitWidthProperty().bind(topBox.widthProperty());
+        //photoView.fitHeightProperty().bind(topBox.heightProperty());
+        dateBox.setEditable(false);
+        captionBox.setEditable(false);
         if (App.currentAlbum == null) {
             // search mode
             albumName.setText("Search Photos");
@@ -199,14 +210,36 @@ public class AlbumController {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Select Images to Import");
         fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg", "*.gif", "*.bmp"));
-        List<File> selectedFiles = fileChooser.showOpenMultipleDialog(App.stage); // pass your Stage
-        
-        
-        //NewTagController controller = loader.getController();
-        //controller.setCurrentPhoto(currentPhoto); // Pass the selected photo here
+        List<File> selectedFiles = fileChooser.showOpenMultipleDialog(App.stage);
+
         if (selectedFiles != null && !selectedFiles.isEmpty()) {
-            App.currentAlbum.addPhotos(selectedFiles);
-            populatePictures();
+            List<File> uniqueFiles = new ArrayList<>();
+
+            for (File file : selectedFiles) {
+                boolean duplicate = false;
+                for (AlbumPhoto ap : App.currentAlbum.getPhotos()) {
+                    Photo p = ap.getPhoto();
+                    if (p.getPath().equals(file.getAbsolutePath())) {
+                        duplicate = true;
+                        break;
+                    }
+                }
+                if (!duplicate) {
+                    uniqueFiles.add(file);
+                }
+            }
+
+            if (!uniqueFiles.isEmpty()) {
+                App.currentAlbum.addPhotos(uniqueFiles);
+                populatePictures();
+            } else {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("No New Photos");
+                alert.setHeaderText(null);
+                alert.setContentText("Photo is already in album.");
+                alert.showAndWait();
+            }
+
         } else {
             System.out.println("No files selected.");
         }
@@ -233,6 +266,25 @@ public class AlbumController {
         saveDescriptionButton.setVisible(false);
         editDescriptionButton.setVisible(true);
         System.out.println("Saved");
+    }
+
+    @FXML
+    private void editCaption(ActionEvent event) {
+        if (currentPhoto == null || currentPhoto.getPhoto() == null) {
+            return; // Safety check
+        }
+    
+        TextInputDialog dialog = new TextInputDialog(currentPhoto.getPhoto().getCaption());
+        dialog.setTitle("Edit Caption");
+        dialog.setHeaderText("Edit Photo Caption");
+        dialog.setContentText("Enter a new caption:");
+    
+        Optional<String> result = dialog.showAndWait();
+        result.ifPresent(newCaption -> {
+            currentPhoto.getPhoto().setCaption(newCaption.trim());
+            App.saveUsers();
+            populatePictures();
+        });
     }
 
     @FXML
@@ -416,6 +468,11 @@ public class AlbumController {
             System.out.println("photoView: " + photoView.getImage().getWidth());
             System.out.println("Container: " + container.getWidth());
             currentPhoto = photo;
+            Instant fileTime = currentPhoto.getPhoto().getFileTime();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M/d/yyyy");
+            String formattedDate = LocalDateTime.ofInstant(fileTime, ZoneId.systemDefault()).format(formatter);
+            dateBox.setText(formattedDate);
+            captionBox.setText(currentPhoto.getPhoto().getCaption());
             // javaFx button for edit/create/delete need to be enabled because a currentPhoto is selected.
             newTag.setDisable(false);
             editTag.setDisable(false);

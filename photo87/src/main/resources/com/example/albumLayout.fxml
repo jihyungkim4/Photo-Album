@@ -190,7 +190,8 @@
       
                                              <!-- Row 2 -->
                                              <Label alignment="CENTER_RIGHT" text="Caption" GridPane.columnIndex="0" GridPane.rowIndex="1" />
-                                             <TextField fx:id="captionBox" prefWidth="180" GridPane.columnIndex="1" GridPane.hgrow="NEVER" GridPane.rowIndex="1" />
+                                             <TextField fx:id="captionBox" prefWidth="180" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                             <Button fx:id="editCaptionBtn" mnemonicParsing="false" onAction="#editCaption" text="Edit Caption" GridPane.columnIndex="2" GridPane.rowIndex="1" />
                                           </children>
                                           <columnConstraints>
                                              <ColumnConstraints halignment="RIGHT" />
