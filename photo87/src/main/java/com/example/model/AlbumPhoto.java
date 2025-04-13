@@ -2,6 +2,7 @@ package com.example.model;
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class AlbumPhoto implements Serializable {
@@ -22,8 +23,21 @@ public class AlbumPhoto implements Serializable {
     }
 
     // Add a tag to this photo
-    public void addTag(Tag tag) {
+    public void addTag(Tag tag, User user) {
         tags.add(tag); // Add tag to this specific photo
+        user.globalTagIndex.addTag(tag, this);
+    }
+
+    public void deleteTag(String tagType, String tagValue, User user) {
+        for (Iterator<Tag> iterator = tags.iterator(); iterator.hasNext(); ) {
+            Tag tag = iterator.next();
+            if (tag.getName().equals(tagType) && tag.getValue().equals(tagValue)) {
+                // Modify user global tag index
+                user.globalTagIndex.deleteTag(tag, this);
+                iterator.remove();
+                break;  // Stop after removing one
+            }
+        }
     }
 
     public int getIndex() {

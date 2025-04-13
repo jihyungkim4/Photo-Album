@@ -1,6 +1,9 @@
 package com.example.model;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 public class User implements Serializable {
     String username;
@@ -8,6 +11,7 @@ public class User implements Serializable {
     ArrayList<Album> albums;
     DateIndex dateIndex;
     public TagIndex globalTagIndex; //Global tagIndex for the user
+    ArrayList<String> tagTypes;
 
     public User(String username) {
         this.username = username;
@@ -15,6 +19,9 @@ public class User implements Serializable {
         albums = new ArrayList<Album>();
         dateIndex = new DateIndex();
         globalTagIndex = new TagIndex();
+        
+        tagTypes = new ArrayList<>(Arrays.asList("Location", "Person", "Season", "Event", "Activity", "Object", "Animal"));
+        Collections.sort(tagTypes);
     }
 
     public Album createAlbum(String albumName) {
@@ -22,6 +29,26 @@ public class User implements Serializable {
         albums.add(album);
         return album;
 
+    }
+
+    public List<String> getTagTypes() {
+        return tagTypes;
+    }
+
+    public boolean hasTagType(String tagType) {
+        for (String tagT : tagTypes) {
+            if (tagT.equals(tagType)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void addTagType(String tagType) {
+        if (!hasTagType(tagType)) {
+            tagTypes.add(tagType);
+            Collections.sort(tagTypes);
+        }
     }
 
     public ArrayList<Album> getAlbums() {
@@ -41,14 +68,10 @@ public class User implements Serializable {
         Album album = new Album(albumName, photos);
         albums.add(album);
         return album;
-
-
     }
 
     public void deleteAlbum(Album album) {
         albums.remove(album);
     }
-
-
 }
 

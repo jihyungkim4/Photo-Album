@@ -6,13 +6,13 @@ public class Tag implements Serializable {
     Photo photo;
     String name;
     String value;
-    Boolean multipleAllowed;
+    //Boolean multipleAllowed;
 
-    public Tag(Photo photo, String name, String value, Boolean multipleAllowed) {
+    public Tag(Photo photo, String name, String value) {
         this.photo = photo;
         this.name = name;
         this.value = value;
-        this.multipleAllowed = multipleAllowed;
+     // this.multipleAllowed = multipleAllowed;
     }
 
     public String getName() {
@@ -23,9 +23,9 @@ public class Tag implements Serializable {
         return this.value;
     }
 
-    public Boolean isMultipleAllowed() {
-        return this.multipleAllowed;
-    }
+    // public Boolean isMultipleAllowed() {
+    //     return this.multipleAllowed;
+    // }
    
 
 }

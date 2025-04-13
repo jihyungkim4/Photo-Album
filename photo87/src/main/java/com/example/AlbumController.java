@@ -125,9 +125,6 @@ public class AlbumController {
 
     @FXML
     private void initialize() {
-        //photoView.fitWidthProperty().bind(topBox.widthProperty());
-        //photoView.fitHeightProperty().bind(topBox.heightProperty());
-
         if (App.currentAlbum == null) {
             // search mode
             albumName.setText("Search Photos");
@@ -161,22 +158,35 @@ public class AlbumController {
     }
 
     @FXML
-    private void openTagDialog() {
+    private void createNewTag() {
+        openTagDialog(null, null);
+    }
+
+    private void openTagDialog(String tagType, String tagValue) {
          try {
             // Load the FXML file for the Tag Dialog
             FXMLLoader loader = new FXMLLoader(getClass().getResource("newTag.fxml"));
             Scene dialogScene = new Scene(loader.load());  // Load the scene from the FXML
 
-            NewTagController controller = loader.getController();
+            TagController controller = loader.getController();
             controller.setCurrentPhoto(currentPhoto);
-            controller.setAlbumController(this);
             // Create a new Stage for the dialog (this will be a separate window)
             Stage dialogStage = new Stage();
-            dialogStage.setTitle("Create New Tag");
+            if (tagType == null) {
+                dialogStage.setTitle("Create New Tag");
+                
+            } else {
+                dialogStage.setTitle("Edit Tag");
+                controller.setOldTagType(tagType); 
+                controller.setOldTagValue(tagValue);     
+            }
             dialogStage.setScene(dialogScene);  // Set the scene to the dialog
             dialogStage.initModality(Modality.APPLICATION_MODAL);  // Makes the dialog modal (blocks interaction with the main window)
             dialogStage.showAndWait();  // Display the dialog and wait for the user to close it
 
+            if (controller.getNeedRefresh()) {
+                populateTags(currentPhoto);
+            }
             
         } catch (IOException e) {
             e.printStackTrace();  // Handle exceptions (like file not found or I/O errors)
@@ -270,6 +280,31 @@ public class AlbumController {
         App.setRoot("userAlbums");
     }
 
+    @FXML
+    void deleteSelectedTag(ActionEvent event) {
+        int selectedIndex = tagTableView.getSelectionModel().getSelectedIndex();
+        if (selectedIndex == -1) {
+            return;
+        }
+        String nameValue = tagTypeTable.getCellData(selectedIndex);
+        String tagValue = tagValueTable.getCellData(selectedIndex);
+        currentPhoto.deleteTag(nameValue, tagValue, App.user);
+        populateTags(currentPhoto);
+    }
+
+    @FXML
+    void editSelectedTag(ActionEvent event) {
+        int selectedIndex = tagTableView.getSelectionModel().getSelectedIndex();
+        if (selectedIndex == -1) {
+            return;
+        }
+
+        String tagType = tagTypeTable.getCellData(selectedIndex);
+        String tagValue = tagValueTable.getCellData(selectedIndex);
+        // old tag will be deleted and replaced with new if user confirms
+        openTagDialog(tagType, tagValue);
+    }
+
     public void setupColumns() {
         // Set the cell value for the tag type (name of the tag)
         tagTypeTable.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
@@ -279,10 +314,10 @@ public class AlbumController {
     }
 
     public void populateTags(AlbumPhoto currentPhoto) {
-    if (currentPhoto != null) {
-        List<Tag> tags = currentPhoto.getTags(); // Get the tags from the current photo
-        ObservableList<Tag> observableTags = FXCollections.observableArrayList(tags); // Convert to ObservableList
-        tagTableView.setItems(observableTags); // Set the items of the TableView
+        if (currentPhoto != null) {
+            List<Tag> tags = currentPhoto.getTags(); // Get the tags from the current photo
+            ObservableList<Tag> observableTags = FXCollections.observableArrayList(tags); // Convert to ObservableList
+            tagTableView.setItems(observableTags); // Set the items of the TableView
         }
     }
     
@@ -441,6 +476,4 @@ public class AlbumController {
         Image image = new Image("file:" + imagePath);
         imageView.setImage(image);
     }
-
-    
 }

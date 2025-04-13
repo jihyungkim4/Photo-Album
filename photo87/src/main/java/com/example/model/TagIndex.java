@@ -17,13 +17,23 @@ import java.io.FileInputStream;
 
 public class TagIndex implements Serializable {
 
-    public Map<String, List<AlbumPhoto>> tagNameIndex;
-    public Map<String, List<AlbumPhoto>> tagValueIndex;
+    public Map<TagValue, List<AlbumPhoto>> tagValueIndex;
+   
 
     public TagIndex() {
-        tagNameIndex = new HashMap<>();
-        tagNameIndex = new HashMap<>();
+        tagValueIndex = new HashMap<>();
+        
     }
+
+    public void addTag(Tag tag, AlbumPhoto photo) {
+
+    }
+
+    public void deleteTag(Tag tag, AlbumPhoto photo) {
+
+    }
+
+
 
     // Get all tags for a specific name
     // public List<Tag> getTagsByName(String name) {
