@@ -18,6 +18,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
@@ -27,6 +29,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 public class UserAlbumsController {
 
@@ -57,6 +61,7 @@ public class UserAlbumsController {
 
     @FXML
     private void initialize() {
+        clearAlbumSelection();
         populateAlbums(); 
     }
 
@@ -83,13 +88,7 @@ public class UserAlbumsController {
             App.user.deleteAlbum(currentAlbum);
 
             albums.getChildren().remove(currentSelection);
-
-            currentAlbum = null;
-            currentSelection = null;
-            albumName.setText("");
-            description.setText("Description:");
-            startDate.setText("Start Date:");
-            endDate.setText("End Date:");
+            clearAlbumSelection();
 
             App.saveUsers();
             System.out.println("Album deleted: " + temp);
@@ -112,41 +111,10 @@ public class UserAlbumsController {
             showError("No album selected.");
             return;
         }
-
-        TextInputDialog nameDialog = new TextInputDialog(currentAlbum.getName());
-        nameDialog.setTitle("Modify Album");
-        nameDialog.setHeaderText("Edit Album Name");
-        nameDialog.setContentText("New name:");
-
-        Optional<String> nameResult = nameDialog.showAndWait();
-        if (nameResult.isEmpty()) return;
-        String newName = nameResult.get().trim();
-        if (newName.isEmpty()) {
-            showError("Name cannot be empty.");
-            return;
-        }
-
-        TextInputDialog descDialog = new TextInputDialog(currentAlbum.getDescription());
-        descDialog.setTitle("Modify Album");
-        descDialog.setHeaderText("Edit Album Description");
-        descDialog.setContentText("New description:");
-
-        Optional<String> descResult = descDialog.showAndWait();
-        if (descResult.isEmpty()) return;
-        String newDesc = descResult.get().trim();
-
-        if (!newName.equals(currentAlbum.getName()) &&
-            App.user.getAlbum(newName) != null) {
-            showError("Album name already exists.");
-            return;
-        }
-
-        currentAlbum.setName(newName);
-        currentAlbum.setDescription(newDesc);
-
+        App.openAlbumDialog(currentAlbum);
         albumName.setText("Name: " + currentAlbum.getName());
         description.setText("Description: " + currentAlbum.getDescription());
-        App.saveUsers();
+        
     }
 
     private void showError(String message) {
@@ -161,47 +129,9 @@ public class UserAlbumsController {
     @FXML
     void newAlbum(ActionEvent event) {
 
-        TextInputDialog dialog = new TextInputDialog();
-        dialog.setTitle("Create New Album");
-        dialog.setHeaderText("Enter the name of the new album:");
-        dialog.setContentText("Album name:");
-
-        Optional<String> result = dialog.showAndWait();
-        if (result.isPresent()) {
-            String name = result.get().trim();
-            if (name.isEmpty()) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Invalid Album Name");
-                alert.setHeaderText("Album name cannot be empty");
-                alert.setContentText("Please provide a valid name for the album.");
-                alert.showAndWait();
-                return;
-            }
-
-            if (getAlbum(name) != null) {
-                System.out.println("Alert: Album already exists");
-                Alert alert = new Alert(Alert.AlertType.WARNING);
-                alert.setTitle("Album Already Exists");
-                alert.setHeaderText("An album with this name already exists.");
-                alert.setContentText("Please choose a different name.");
-                alert.showAndWait();
-                return;
-            }
-
-            Album album = App.user.createAlbum(name);
-            // addPhotoToTilePane(albums, "folder.png", result.get());
-            TextInputDialog descDialog = new TextInputDialog();
-            descDialog.setTitle("Create New Album");
-            descDialog.setHeaderText("Enter a description for the album:");
-            descDialog.setContentText("Description:");
-            
-            Optional<String> descResult = descDialog.showAndWait();
-            if (descResult.isEmpty()) return;
-
-            String albumDesc = descResult.get().trim();
-            album.setDescription(albumDesc);
-            addPhotoToTilePane(albums, "folder.png", name);
-            App.saveUsers();
+        Album newAlbum = App.openAlbumDialog(null);
+        if (newAlbum != null) {
+            addPhotoToTilePane(albums, "folder.png", newAlbum.getName());
         }
     }
 
@@ -216,6 +146,7 @@ public class UserAlbumsController {
             description.setText("Description: " + currentAlbum.getDescription());
         } catch (IOException e) {
             // todo
+            System.out.println(e.getMessage());
         }
     }
 
@@ -233,6 +164,15 @@ public class UserAlbumsController {
             }
         }
         return null;
+    }
+
+    private void clearAlbumSelection() {
+        currentAlbum = null;
+        currentSelection = null;
+        albumName.setText("Album:");
+        description.setText("Description:");
+        startDate.setText("Start Date:");
+        endDate.setText("End Date:");
     }
 
     private void populateAlbums() {
@@ -272,12 +212,7 @@ public class UserAlbumsController {
                 if (currentSelection != null) {
                     currentSelection.setStyle("-fx-padding: 10; -fx-alignment: center;"); // Clear back to default
                     if (currentSelection == container) {
-                        currentSelection = null;
-                        currentAlbum = null;
-                        albumName.setText("");
-                        description.setText("Description:");
-                        startDate.setText("Start Date:");
-                        endDate.setText("End Date:");
+                        clearAlbumSelection();
                         return;
                     }
                 }

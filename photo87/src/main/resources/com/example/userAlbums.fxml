@@ -47,7 +47,6 @@
                                     <Button mnemonicParsing="false" onAction="#newAlbum" text="New" />
                                     <Button mnemonicParsing="false" onAction="#deleteAlbum" text="Delete" />
                                     <Button mnemonicParsing="false" onAction="#search" text="Search" />
-                                    <Button mnemonicParsing="false" onAction="#merge" text="Merge" />
                                  </children>
                                  <padding>
                                     <Insets left="5.0" right="5.0" top="8.0" />

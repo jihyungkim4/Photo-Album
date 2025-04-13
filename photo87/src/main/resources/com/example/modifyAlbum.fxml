@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="161.0" prefWidth="338.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ModifyAlbumController">
+   <children>
+      <Label layoutX="36.0" layoutY="33.0" text="Name:" />
+      <Label layoutX="14.0" layoutY="68.0" prefHeight="17.0" prefWidth="78.0" text="Description:" />
+      <TextField fx:id="albumName" layoutX="82.0" layoutY="29.0" />
+      <TextArea fx:id="albumDescription" layoutX="82.0" layoutY="68.0" prefHeight="51.0" prefWidth="149.0" />
+      <Button fx:id="confirmButton" layoutX="245.0" layoutY="29.0" mnemonicParsing="false" onAction="#confirm" text="Confirm" />
+      <Button fx:id="cancelButton" layoutX="245.0" layoutY="68.0" mnemonicParsing="false" onAction="#cancel" prefHeight="25.0" prefWidth="59.0" text="Cancel" />
+   </children>
+</AnchorPane>

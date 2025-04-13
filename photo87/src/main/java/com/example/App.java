@@ -14,12 +14,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-/**
- * Hello world!
- *
- */
 public class App extends Application {
     private static Scene scene;
     public static Library library;
@@ -31,7 +28,7 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        this.stage = stage;
+        App.stage = stage;
         scene = new Scene(loadFXML("login"), 640, 480);
         stage.setScene(scene);
 
@@ -48,6 +45,7 @@ public class App extends Application {
                 App.save();
             }
         });
+        
         stage.show();
     }
 
@@ -106,6 +104,53 @@ public class App extends Application {
         }
     }
 
+    public static Album openAlbumDialog(Album album) {
+        try {
+            // Load the FXML file for the Tag Dialog
+            FXMLLoader loader = new FXMLLoader(App.class.getResource("modifyAlbum.fxml"));
+            Scene dialogScene = new Scene(loader.load());  // Load the scene from the FXML
+
+            ModifyAlbumController controller = loader.getController();
+            //controller.setCurrentPhoto(currentPhoto);
+            // Create a new Stage for the dialog (this will be a separate window)
+            Stage dialogStage = new Stage();
+            if (album != null) {
+                dialogStage.setTitle("Modify Album");
+                controller.setModifyAlbum(album);
+                controller.setNameText(album.getName());
+                controller.setDescriptionText(album.getDescription());
+            } else {
+                dialogStage.setTitle("Create Album");                
+            }
+                
+            dialogStage.setScene(dialogScene);  // Set the scene to the dialog
+            dialogStage.initModality(Modality.APPLICATION_MODAL);  // Makes the dialog modal (blocks interaction with the main window)
+            dialogStage.showAndWait();  // Display the dialog and wait for the user to close it
+
+            // if the user cancelled
+            String albumName = controller.getAlbumNameResult();
+            String albumDescription = controller.getAlbumDescriptionResult();
+            if (albumName != null) {
+                if (album == null) {
+                    // create new
+                    album = App.user.createAlbum(albumName);
+                    if (!albumDescription.isEmpty()) {
+                        album.setDescription(albumDescription);
+                    }
+                } else {
+                    // modify
+                    album.setName(albumName);
+                    album.setDescription(albumDescription);
+                }
+                App.saveUsers();
+            }
+            
+        } catch (IOException e) {
+            e.printStackTrace();  // Handle exceptions (like file not found or I/O errors)
+        }
+        return album;
+    }
+
     public static void saveUsers(){
         save();
     }
@@ -121,52 +166,10 @@ public class App extends Application {
     public static void main(String[] args) {
         try {
             App.library = Library.load(libraryFile);
-            // for (int i = 0; i < library.userFiles.size(); i++) {
-            // UserFile userFile = library.userFiles.get(i);
-            // System.out.println(userFile.username + " " + userFile.path);
-            // if (userFile.username.equals("stock")) {
-            // User user = Library.loadUser(userFile.path);
-            // // use the library here
-            // userFile.save();
-
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         launch();
     }
 }
-
-// private static Stage primaryStage;
-
-// @Override
-// public void start(Stage stage) throws Exception {
-// primaryStage = stage;
-// loadView("albumLayout.fxml");
-// }
-
-// public static void loadView(String fxmlFile) throws IOException {
-// Parent root = FXMLLoader.load(App.class.getResource(fxmlFile));
-// primaryStage.setScene(new Scene(root));
-// primaryStage.show();
-// }
-
-// public static void main(String[] args) {
-// launch(args);
-// try {
-// Library library = Library.load("library.dat");
-// for (int i = 0; i < library.userFiles.size(); i++) {
-// UserFile userFile = library.userFiles.get(i);
-// System.out.println(userFile.username + " " + userFile.path);
-// if (userFile.username.equals("stock")) {
-// User user = Library.loadUser(userFile.path);
-// // use the library here
-// userFile.save();
-// }
-// }
-
-// } catch (Exception e) {
-// e.printStackTrace();
-// }
-
-// System.out.println("Hello World!");
-// }

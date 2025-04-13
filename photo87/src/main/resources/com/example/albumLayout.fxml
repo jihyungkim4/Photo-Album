@@ -58,15 +58,14 @@
   <children>
       <AnchorPane prefHeight="38.0" prefWidth="710.0">
          <children>
-            <Label fx:id="albumName" layoutX="11.0" layoutY="6.0" prefHeight="17.0" prefWidth="412.0" text="Label">
+            <Label fx:id="albumName" layoutX="11.0" layoutY="6.0" prefHeight="30.0" prefWidth="192.0" text="Label">
                <font>
                   <Font size="20.0" />
                </font>
             </Label>
-            <Label layoutX="11.0" layoutY="35.0" text="Description:" />
-            <TextField fx:id="albumDescription" editable="false" layoutX="100.0" layoutY="30.0" prefWidth="400.0" />
-            <Button fx:id="editDescriptionButton" layoutX="510.0" layoutY="30.0" mnemonicParsing="false" onAction="#editDescription" text="Edit" />
-            <Button fx:id="saveDescriptionButton" layoutX="570.0" layoutY="30.0" mnemonicParsing="false" onAction="#saveDescription" text="Save" visible="false" />
+            <Label fx:id="descriptionLabel" layoutX="210.0" layoutY="13.0" text="Description:" />
+            <TextField fx:id="albumDescription" editable="false" layoutX="283.0" layoutY="9.0" prefHeight="25.0" prefWidth="306.0" />
+            <Button fx:id="editAlbumButton" layoutX="598.0" layoutY="8.0" mnemonicParsing="false" onAction="#editAlbum" text="Edit" />
             <Button alignment="CENTER" layoutX="726.0" layoutY="7.0" mnemonicParsing="false" onAction="#backToAlbums" prefWidth="50.0" text="Back" AnchorPane.rightAnchor="74.0" />
             <Button layoutX="788.0" layoutY="7.0" mnemonicParsing="false" onAction="#logOut" text="Logout" AnchorPane.rightAnchor="8.0" />
          </children>
@@ -152,9 +151,9 @@
                                     <Button fx:id="importButton" mnemonicParsing="false" onAction="#importPhotos" text="Import" />
                                     <Button mnemonicParsing="false" text="Move" />
                                     <Button mnemonicParsing="false" text="Copy" />
-                                    <Button mnemonicParsing="false" text="Delete" />
+                                    <Button mnemonicParsing="false" onAction="#deletePhoto" text="Delete" />
                                     <Button fx:id="slideshowButton" mnemonicParsing="false" onAction="#startSlideshow" text="Slideshow" />
-                                    <Button mnemonicParsing="false" onAction="#newAlbum2" text="New Album">
+                                    <Button mnemonicParsing="false" onAction="#newAlbumFromSearch" text="New Album">
                                        <HBox.margin>
                                           <Insets />
                                        </HBox.margin>

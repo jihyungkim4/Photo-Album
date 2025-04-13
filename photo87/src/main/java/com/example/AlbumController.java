@@ -61,10 +61,7 @@ public class AlbumController {
     private TextField albumDescription;
 
     @FXML
-    private Button saveDescriptionButton;
-
-    @FXML
-    private Button editDescriptionButton;
+    private Button editAlbumButton;
 
     @FXML
     private Button slideshowButton;
@@ -136,6 +133,9 @@ public class AlbumController {
     private RadioButton dateSelect;
 
     @FXML
+    private Label descriptionLabel;
+
+    @FXML
     private void initialize() {
         //photoView.fitWidthProperty().bind(topBox.widthProperty());
         //photoView.fitHeightProperty().bind(topBox.heightProperty());
@@ -145,6 +145,10 @@ public class AlbumController {
             // search mode
             albumName.setText("Search Photos");
             enableElement(importButton, false);
+            enableElement(editAlbumButton, false);
+            enableElement(albumDescription, false);
+            enableElement(descriptionLabel, false);
+
             // initialize tagOp dropdown
             tagOp.getItems().addAll("NONE", "AND", "OR");
             populateTagTypes(tagType1);
@@ -249,11 +253,24 @@ public class AlbumController {
         
     }
 
+    @FXML
+    private void deletePhoto() {
+        if (currentPhoto == null) {
+            return;
+        }
+        if (App.currentAlbum != null)  {
+            App.currentAlbum.deletePhoto(currentPhoto, App.user);
+            resetPhotoSelection();
+            populatePictures();
+        }
+    }
+
     private void populateTagTypes(ChoiceBox<String> choiceBox) {  
         List<String> tagTypes = App.user.getTagTypes(); // Get the tags from the current photo
         ObservableList<String> observableTags = FXCollections.observableArrayList(tagTypes); // Convert to ObservableList
         choiceBox.setItems(observableTags); // Set the items of the TableView
     }
+
     
 
     private void openTagDialog(String tagType, String tagValue) {
@@ -328,27 +345,16 @@ public class AlbumController {
         }
     }
 
-    @FXML
-    private void initializeTagTable() {
-        List<Tag> currentTags = currentPhoto.getTags();
-    }
+    // @FXML
+    // private void initializeTagTable() {
+    //     List<Tag> currentTags = currentPhoto.getTags();
+    // }
 
     @FXML
-    private void editDescription(ActionEvent event) {
-        albumDescription.setEditable(true);
-        saveDescriptionButton.setVisible(true);
-        editDescriptionButton.setVisible(false);
-        System.out.println("Editing");
-    }
-
-    @FXML
-    private void saveDescription(ActionEvent event) {
-        App.currentAlbum.setDescription(albumDescription.getText());
-        App.saveUsers();
-        albumDescription.setEditable(false);
-        saveDescriptionButton.setVisible(false);
-        editDescriptionButton.setVisible(true);
-        System.out.println("Saved");
+    private void editAlbum(ActionEvent event) {
+        App.openAlbumDialog(App.currentAlbum);
+        albumName.setText(App.currentAlbum.getName());
+        albumDescription.setText(App.currentAlbum.getDescription()); 
     }
 
     @FXML
@@ -401,8 +407,17 @@ public class AlbumController {
     }
 
     @FXML
-    private void newAlbum2() throws IOException {
-        System.out.println("New Album Pressed");
+    private void newAlbumFromSearch() {
+        if (searchResult == null) {
+            return;
+        }
+        Album newAlbum = App.openAlbumDialog(null);
+        if (newAlbum != null) {
+            for (AlbumPhoto photo : searchResult) {
+                newAlbum.addPhoto(photo.getPhoto());
+            }
+            App.saveUsers();
+        }
     }
 
     @FXML
@@ -496,6 +511,18 @@ public class AlbumController {
         return formatted;
     }
 
+    private void resetPhotoSelection() {
+        newTag.setDisable(true);
+        editTag.setDisable(true);
+        dateBox.setText("");
+        captionBox.setText("");
+        deleteTag.setDisable(true);
+        tagTableView.getItems().clear();
+        photoView.setImage(null);
+        currentSelection = null;
+        currentPhoto = null;
+    }
+
     
     public void addPhotoToTilePane(TilePane tilePane, AlbumPhoto photo) {
         String imagePath = photo.getPhoto().getPath();
@@ -531,15 +558,7 @@ public class AlbumController {
             if (currentSelection != null) {
                 currentSelection.setStyle("-fx-padding: 10; -fx-alignment: center;"); // Clear back to default
                 if (currentSelection == container) {
-                    currentSelection = null;
-                    currentPhoto = null;
-                    newTag.setDisable(true);
-                    editTag.setDisable(true);
-                    dateBox.setText("");
-                    captionBox.setText("");
-                    deleteTag.setDisable(true);
-                    tagTableView.getItems().clear();
-                    photoView.setImage(null);
+                    resetPhotoSelection();
                     return;
                 }
             }
@@ -590,6 +609,10 @@ public class AlbumController {
     }
 
     public void startSlideshow() {
+        if (searchResult == null && App.currentAlbum == null) {
+            return;
+        }
+
         slideshowStage = new Stage();
         slideshowStage.setTitle("Slideshow");
 

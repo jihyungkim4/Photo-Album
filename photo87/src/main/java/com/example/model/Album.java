@@ -53,6 +53,13 @@ public class Album implements Serializable {
         }
     }
 
+    public void deletePhoto(AlbumPhoto photo, User user) {
+        albumPhotos.remove(photo);
+        for (Tag tag : photo.getTags()) {
+            user.globalTagIndex.deleteTag(tag, photo);
+        }
+    }
+
     public String getName() {
         return albumName;
     }
@@ -73,8 +80,4 @@ public class Album implements Serializable {
         this.description = description;
     }
 
-    public void removePhoto(Photo photo) {
-        
-
-    }
 }
