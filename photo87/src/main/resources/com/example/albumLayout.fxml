@@ -196,6 +196,7 @@
                                           <columnConstraints>
                                              <ColumnConstraints halignment="RIGHT" />
                                              <ColumnConstraints hgrow="NEVER" />
+                                             <ColumnConstraints hgrow="NEVER" />
                                           </columnConstraints>
                                              <rowConstraints>
                                                 <RowConstraints />
