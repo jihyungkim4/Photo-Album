@@ -4,8 +4,15 @@ import com.example.model.*;
 import java.io.File;
 import java.io.IOException;
 import java.time.Instant;
+<<<<<<< HEAD
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+=======
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+>>>>>>> 7796356 (Implemented search by date)
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
@@ -24,6 +31,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.Image;
@@ -133,6 +141,12 @@ public class AlbumController {
     private TableColumn<Tag, String> tagValueTable;
 
     @FXML
+    private RadioButton tagSelect;
+
+    @FXML
+    private RadioButton dateSelect;
+
+    @FXML
     private void initialize() {
         //photoView.fitWidthProperty().bind(topBox.widthProperty());
         //photoView.fitHeightProperty().bind(topBox.heightProperty());
@@ -153,6 +167,7 @@ public class AlbumController {
                 }
             });
             tagOp.setValue("NONE");
+            dateSelect.setSelected(true);
             
         } else {
             // album mode
@@ -180,43 +195,68 @@ public class AlbumController {
 
     @FXML
     private void search() {
-        String type1 = tagType1.getValue();
-        String type2 = tagType2.getValue();
-        // tagop
-        String op = tagOp.getValue();
-        // textfields
-        String value1 = tagValue1.getText();
-        String value2 = tagValue2.getText();
+        if (tagSelect.isSelected()) {
+            // search by tags
+            String type1 = tagType1.getValue();
+            String type2 = tagType2.getValue();
+            // tagop
+            String op = tagOp.getValue();
+            // textfields
+            String value1 = tagValue1.getText();
+            String value2 = tagValue2.getText();
+    
+            if (type1.isEmpty() || value1.isEmpty()) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Invalid Input");
+                alert.setHeaderText("Tag type or value cannot be empty");
+                // alert.setContentText("Please provide a valid name for the album.");
+                alert.showAndWait();
+                return;
+            }
+    
+            if (!op.equals("NONE") && (type2.isEmpty() || value2.isEmpty())) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Invalid Input");
+                alert.setHeaderText("Tag type or value cannot be empty");
+                // alert.setContentText("Please provide a valid name for the album.");
+                alert.showAndWait();
+                return;
+            }
+    
+            // create 2 new tag value
+            TagValue tv1 = new TagValue(type1, value1);
+            TagValue tv2 = null;
+            
+            if (!op.equals("NONE")) {
+                tv2 = new TagValue(type2, value2);
+            }
+            
+            searchResult = App.user.searchByTag(tv1, tv2, op);
+            
+        } else if (dateSelect.isSelected()) {
+            // search by date
+            LocalDate start = startDate.getValue();
+            LocalDate end = endDate.getValue();
+            
+            if (start == null || end == null) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Invalid Input");
+                alert.setHeaderText("Start or end date cannot be empty");
+                // alert.setContentText("Please provide a valid name for the album.");
+                alert.showAndWait();
+                return;
+            }
 
-        if (type1.isEmpty() || value1.isEmpty()) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Invalid Input");
-            alert.setHeaderText("Tag type or value cannot be empty");
-            // alert.setContentText("Please provide a valid name for the album.");
-            alert.showAndWait();
-            return;
+            ZonedDateTime zdtstart = ZonedDateTime.of(start, LocalTime.MIDNIGHT, ZoneId.systemDefault());
+            ZonedDateTime zdtend = ZonedDateTime.of(end, LocalTime.of(23,59,59), ZoneId.systemDefault());
+
+            Instant startInstant = zdtstart.toInstant();
+            Instant endInstant = zdtend.toInstant();
+
+            searchResult = App.user.searchByDate(startInstant, endInstant);
         }
-
-        if (!op.equals("NONE") && (type2.isEmpty() || value2.isEmpty())) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Invalid Input");
-            alert.setHeaderText("Tag type or value cannot be empty");
-            // alert.setContentText("Please provide a valid name for the album.");
-            alert.showAndWait();
-            return;
-        }
-
-        // create 2 new tag value
-        TagValue tv1 = new TagValue(type1, value1);
-        TagValue tv2 = null;
         
-        if (!op.equals("NONE")) {
-            tv2 = new TagValue(type2, value2);
-        }
-        
-        searchResult = App.user.searchByTag(tv1, tv2, op);
         populatePictures();
-        
         
     }
 
@@ -459,6 +499,13 @@ public class AlbumController {
         }
     }
 
+    private String formatInstant(Instant instant) {
+        ZoneId zone = ZoneId.systemDefault();
+        ZonedDateTime zdt = instant.atZone(zone);
+        String formatted = zdt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        return formatted;
+    }
+
     
     public void addPhotoToTilePane(TilePane tilePane, AlbumPhoto photo) {
         String imagePath = photo.getPhoto().getPath();
@@ -498,6 +545,8 @@ public class AlbumController {
                     currentPhoto = null;
                     newTag.setDisable(true);
                     editTag.setDisable(true);
+                    dateBox.setText("");
+                    captionBox.setText("");
                     deleteTag.setDisable(true);
                     tagTableView.getItems().clear();
                     photoView.setImage(null);
@@ -541,6 +590,9 @@ public class AlbumController {
             newTag.setDisable(false);
             editTag.setDisable(false);
             deleteTag.setDisable(false);
+            dateBox.setText(formatInstant(currentPhoto.getPhoto().getFileTime()));
+            captionBox.setText(currentPhoto.getPhoto().getCaption());
+
             setupColumns();
             populateTags(currentPhoto);
 
@@ -575,7 +627,14 @@ public class AlbumController {
         });
 
         nextButton.setOnAction(e -> {
-            if (currentImageIndex < App.currentAlbum.getPhotos().size() - 1) {
+            int listSize = 0;
+            if (App.currentAlbum == null) {
+                listSize = searchResult.size();
+            } else {
+                listSize = App.currentAlbum.getPhotos().size();
+            }
+            
+            if (currentImageIndex < listSize - 1) {
                 currentImageIndex++;
                 showSlideshowPhoto(slideshowImageView, currentImageIndex);
             }

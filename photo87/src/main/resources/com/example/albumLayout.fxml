@@ -90,7 +90,7 @@
                                  <children>
                                     <HBox prefHeight="40.0" prefWidth="527.0" spacing="15.0" GridPane.halignment="RIGHT" GridPane.hgrow="ALWAYS" GridPane.vgrow="NEVER">
                                        <children>
-                                          <RadioButton mnemonicParsing="false" onAction="#dateSearchSelected" text="Date">
+                                          <RadioButton fx:id="dateSelect" mnemonicParsing="false" onAction="#dateSearchSelected" text="Date">
                                              <HBox.margin>
                                                 <Insets top="3.0" />
                                              </HBox.margin>
@@ -123,7 +123,7 @@
                                     </HBox>
                                     <HBox prefHeight="31.0" prefWidth="531.0" spacing="15.0" GridPane.halignment="RIGHT" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="NEVER">
                                        <children>
-                                          <RadioButton mnemonicParsing="false" onAction="#tagSearchSelected" text="Tags" toggleGroup="$searchmode">
+                                          <RadioButton fx:id="tagSelect" mnemonicParsing="false" onAction="#tagSearchSelected" text="Tags" toggleGroup="$searchmode">
                                              <HBox.margin>
                                                 <Insets top="3.0" />
                                              </HBox.margin></RadioButton>
@@ -186,7 +186,7 @@
                                           <children>
                                              <!-- Row 1 -->
                                              <Label alignment="CENTER_RIGHT" text="Date" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-                                             <TextField fx:id="dateBox" prefWidth="180" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                                             <TextField fx:id="dateBox" disable="true" prefWidth="180" GridPane.columnIndex="1" GridPane.rowIndex="0" />
       
                                              <!-- Row 2 -->
                                              <Label alignment="CENTER_RIGHT" text="Caption" GridPane.columnIndex="0" GridPane.rowIndex="1" />

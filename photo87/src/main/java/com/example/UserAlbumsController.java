@@ -221,6 +221,7 @@ public class UserAlbumsController {
 
     @FXML
     void search(ActionEvent event) throws IOException {
+        App.currentAlbum = null;
         App.setRoot("albumLayout");
 
     }
