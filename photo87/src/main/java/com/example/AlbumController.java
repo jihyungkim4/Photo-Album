@@ -4,18 +4,12 @@ import com.example.model.*;
 import java.io.File;
 import java.io.IOException;
 import java.time.Instant;
-<<<<<<< HEAD
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-=======
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
->>>>>>> 7796356 (Implemented search by date)
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -24,7 +18,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -39,8 +32,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
@@ -48,7 +39,6 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.stage.Stage;
 
 public class AlbumController {
 
@@ -58,7 +48,6 @@ public class AlbumController {
     private Stage slideshowStage;
     private ArrayList<AlbumPhoto> searchResult = null;
     
-
     @FXML
     private TilePane photos;
 
@@ -376,6 +365,7 @@ public class AlbumController {
         Optional<String> result = dialog.showAndWait();
         result.ifPresent(newCaption -> {
             currentPhoto.getPhoto().setCaption(newCaption.trim());
+            captionBox.setText(currentPhoto.getPhoto().getCaption());
             App.saveUsers();
             populatePictures();
         });
@@ -581,11 +571,7 @@ public class AlbumController {
             System.out.println("photoView: " + photoView.getImage().getWidth());
             System.out.println("Container: " + container.getWidth());
             currentPhoto = photo;
-            Instant fileTime = currentPhoto.getPhoto().getFileTime();
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M/d/yyyy");
-            String formattedDate = LocalDateTime.ofInstant(fileTime, ZoneId.systemDefault()).format(formatter);
-            dateBox.setText(formattedDate);
-            captionBox.setText(currentPhoto.getPhoto().getCaption());
+
             // javaFx button for edit/create/delete need to be enabled because a currentPhoto is selected.
             newTag.setDisable(false);
             editTag.setDisable(false);

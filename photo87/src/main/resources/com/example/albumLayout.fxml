@@ -186,7 +186,7 @@
                                           <children>
                                              <!-- Row 1 -->
                                              <Label alignment="CENTER_RIGHT" text="Date" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-                                             <TextField fx:id="dateBox" disable="true" prefWidth="180" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                                             <TextField fx:id="dateBox" prefWidth="180" GridPane.columnIndex="1" GridPane.rowIndex="0" />
       
                                              <!-- Row 2 -->
                                              <Label alignment="CENTER_RIGHT" text="Caption" GridPane.columnIndex="0" GridPane.rowIndex="1" />

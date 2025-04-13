@@ -1,8 +1,10 @@
 package com.example.model;
 import java.io.IOException;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.nio.file.Paths;
 
 public class UserFile implements Serializable {
     public String username;
@@ -16,12 +18,12 @@ public class UserFile implements Serializable {
             
             User user = new User(username);
             Album album = user.createAlbum("stock");
-            album.addPhoto(new Photo("photo87/stock/bambi.jpg"));
-            album.addPhoto(new Photo("photo87/stock/bluejay.jpg"));
-            album.addPhoto(new Photo("photo87/stock/beautifulsea.jpg"));
-            album.addPhoto(new Photo("photo87/stock/bunnycat.jpg"));
-            album.addPhoto(new Photo("photo87/stock/roundbird.jpg"));
-            album.addPhoto(new Photo("photo87/stock/naples.jpg"));
+            album.addPhoto(new Photo(Paths.get("photo87/stock/bambi.jpg").toAbsolutePath().toString()));
+            album.addPhoto(new Photo(Paths.get("photo87/stock/bluejay.jpg").toAbsolutePath().toString()));
+            album.addPhoto(new Photo(Paths.get("photo87/stock/beautifulsea.jpg").toAbsolutePath().toString())); 
+            album.addPhoto(new Photo(Paths.get("photo87/stock/bunnycat.jpg").toAbsolutePath().toString()));
+            album.addPhoto(new Photo(Paths.get("photo87/stock/roundbird.jpg").toAbsolutePath().toString()));
+            album.addPhoto(new Photo(Paths.get("photo87/stock/naples.jpg").toAbsolutePath().toString()));
             out.writeObject(user);
 
         } catch (IOException e) {
