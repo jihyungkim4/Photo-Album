@@ -1,6 +1,9 @@
 package com.example.model;
 
-public class TagValue {
+import java.io.Serializable;
+import java.util.Objects;
+
+public class TagValue implements Serializable {
 
     String tagType;
     String tagValue;
@@ -17,6 +20,20 @@ public class TagValue {
     public String getTagValue() {
         return tagValue;
     }
+
+    @Override 
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof TagValue)) return false;
+        TagValue other = (TagValue) o;
+        return tagType.equals(other.tagType) && tagValue.equals(other.tagValue);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(tagType, tagValue);
+    }
+
 
     
 }

@@ -101,18 +101,18 @@
                                              <HBox.margin>
                                                 <Insets top="3.0" />
                                              </HBox.margin></Label>
-                                          <DatePicker fx:id="startDate" prefHeight="25.0" prefWidth="73.0" />
+                                          <DatePicker fx:id="startDate" prefHeight="25.0" prefWidth="90.0" />
                                           <Label text="End">
                                              <HBox.margin>
                                                 <Insets top="3.0" />
                                              </HBox.margin></Label>
-                                          <DatePicker fx:id="endDate" prefHeight="25.0" prefWidth="73.0" />
-                                          <Button mnemonicParsing="false" prefWidth="67.0" text="Search">
+                                          <DatePicker fx:id="endDate" prefHeight="25.0" prefWidth="90.0" />
+                                          <Button mnemonicParsing="false" onAction="#search" prefHeight="25.0" prefWidth="73.0" text="Search">
                                              <HBox.margin>
                                                 <Insets />
                                              </HBox.margin>
                                           </Button>
-                                          <Button mnemonicParsing="false" prefWidth="67.0" text="Reset" />
+                                          <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="73.0" text="Reset" />
                                        </children>
                                        <padding>
                                           <Insets left="7.0" top="5.0" />
@@ -127,10 +127,10 @@
                                              <HBox.margin>
                                                 <Insets top="3.0" />
                                              </HBox.margin></RadioButton>
-                                          <ChoiceBox fx:id="tagType1" prefHeight="25.0" prefWidth="63.0" />
+                                          <ChoiceBox fx:id="tagType1" prefHeight="25.0" prefWidth="90.0" />
                                           <TextField fx:id="tagValue1" prefHeight="25.0" prefWidth="83.0" />
                                           <ChoiceBox fx:id="tagOp" prefHeight="20.0" prefWidth="50.0" scaleShape="false" scaleY="0.8" style="-fx-font-size: 8pt;" />
-                                          <ChoiceBox fx:id="tagType2" prefHeight="25.0" prefWidth="63.0" />
+                                          <ChoiceBox fx:id="tagType2" prefHeight="25.0" prefWidth="90.0" />
                                           <TextField fx:id="tagValue2" prefHeight="25.0" prefWidth="83.0" />
                                        </children>
                                        <padding>

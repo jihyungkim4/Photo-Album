@@ -17,7 +17,7 @@ import java.io.FileInputStream;
 
 public class TagIndex implements Serializable {
 
-    public Map<TagValue, List<AlbumPhoto>> tagValueIndex;
+    public Map<TagValue, ArrayList<AlbumPhoto>> tagValueIndex;
    
 
     public TagIndex() {
@@ -26,26 +26,19 @@ public class TagIndex implements Serializable {
     }
 
     public void addTag(Tag tag, AlbumPhoto photo) {
-
+        TagValue tv = new TagValue(tag.getName(), tag.getValue());
+        tagValueIndex.computeIfAbsent(tv, k -> new ArrayList<>()).add(photo);
     }
 
     public void deleteTag(Tag tag, AlbumPhoto photo) {
-
+        TagValue tv = new TagValue(tag.getName(), tag.getValue());
+        ArrayList<AlbumPhoto> result = tagValueIndex.get(tv); 
+        if (result != null && !result.isEmpty()) {
+            result.remove(photo);
+        }   
     }
 
-
-
-    // Get all tags for a specific name
-    // public List<Tag> getTagsByName(String name) {
-       
-    // }
-
-    // Search for tags based on a name or value
-    // public Set<Tag> searchTags(String query) {
-    // }
-    
-    // Get all tags in the index
-    // public Map<String, List<Tag>> getAllTags() {
-    // }
-
+    public ArrayList<AlbumPhoto> search(TagValue tv) {
+        return tagValueIndex.getOrDefault(tv, new ArrayList<>());
+    }
 }

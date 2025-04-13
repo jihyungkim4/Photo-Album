@@ -206,13 +206,17 @@ public class UserAlbumsController {
     }
 
     @FXML
-    void openAlbum(ActionEvent event) throws IOException {
+    void openAlbum() {
         if (currentAlbum == null) {
             return;
         }
         App.currentAlbum = currentAlbum;
-        App.setRoot("albumLayout");
-        description.setText("Description: " + currentAlbum.getDescription());
+        try {
+            App.setRoot("albumLayout");
+            description.setText("Description: " + currentAlbum.getDescription());
+        } catch (IOException e) {
+            // todo
+        }
     }
 
     @FXML
@@ -262,50 +266,57 @@ public class UserAlbumsController {
         });
 
         container.setOnMouseClicked(e -> {
-            System.out.println("album selection clicked");
-            if (currentSelection != null) {
-                currentSelection.setStyle("-fx-padding: 10; -fx-alignment: center;"); // Clear back to default
-                if (currentSelection == container) {
-                    currentSelection = null;
-                    currentAlbum = null;
-                    albumName.setText("");
-                    description.setText("Description:");
-                    startDate.setText("Start Date:");
-                    endDate.setText("End Date:");
-                    return;
+            if (e.getClickCount() == 1) {
+                System.out.println("album selection clicked");
+                if (currentSelection != null) {
+                    currentSelection.setStyle("-fx-padding: 10; -fx-alignment: center;"); // Clear back to default
+                    if (currentSelection == container) {
+                        currentSelection = null;
+                        currentAlbum = null;
+                        albumName.setText("");
+                        description.setText("Description:");
+                        startDate.setText("Start Date:");
+                        endDate.setText("End Date:");
+                        return;
+                    }
                 }
-            }
-            currentSelection = container;
-            currentAlbum = getAlbum(label.getText());
-            container.setStyle("-fx-padding: 10; -fx-alignment: center; -fx-background-color: #d0d0d0; -fx-border-color: #888; -fx-cursor: hand;");
-            albumName.setText("Album: " + label.getText()); 
-            description.setText("Description: " + currentAlbum.getDescription());
-
-            if (!currentAlbum.getPhotos().isEmpty()) {
-                Instant earliest = currentAlbum.getPhotos().get(0).getFileTime();
-                Instant latest = earliest;
-
-                for (AlbumPhoto ap : currentAlbum.getPhotos()) {
-                    Photo p = ap.getPhoto();
-                    Instant time = p.getFileTime();
-                    if (time.isBefore(earliest)) earliest = time;
-                    if (time.isAfter(latest)) latest = time;
+                currentSelection = container;
+                currentAlbum = getAlbum(label.getText());
+                container.setStyle("-fx-padding: 10; -fx-alignment: center; -fx-background-color: #d0d0d0; -fx-border-color: #888; -fx-cursor: hand;");
+                albumName.setText("Album: " + label.getText()); 
+                description.setText("Description: " + currentAlbum.getDescription());
+    
+                if (!currentAlbum.getPhotos().isEmpty()) {
+                    Instant earliest = currentAlbum.getPhotos().get(0).getFileTime();
+                    Instant latest = earliest;
+    
+                    for (AlbumPhoto ap : currentAlbum.getPhotos()) {
+                        Photo p = ap.getPhoto();
+                        Instant time = p.getFileTime();
+                        if (time.isBefore(earliest)) earliest = time;
+                        if (time.isAfter(latest)) latest = time;
+                    }
+    
+                    // Convert to readable format
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M/d/yyyy");
+                    LocalDateTime start = LocalDateTime.ofInstant(earliest, ZoneId.systemDefault());
+                    LocalDateTime end = LocalDateTime.ofInstant(latest, ZoneId.systemDefault());
+                    String startFormatted = start.format(formatter);
+                    String endFormatted = end.format(formatter);
+    
+                    startDate.setText("Start Date: " + startFormatted);
+                    endDate.setText("End Date: " + endFormatted);
+                } else {
+                    startDate.setText("Start Date: ");
+                    endDate.setText("End Date: ");
                 }
-
-                // Convert to readable format
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M/d/yyyy");
-                LocalDateTime start = LocalDateTime.ofInstant(earliest, ZoneId.systemDefault());
-                LocalDateTime end = LocalDateTime.ofInstant(latest, ZoneId.systemDefault());
-                String startFormatted = start.format(formatter);
-                String endFormatted = end.format(formatter);
-
-                startDate.setText("Start Date: " + startFormatted);
-                endDate.setText("End Date: " + endFormatted);
-            } else {
-                startDate.setText("Start Date: ");
-                endDate.setText("End Date: ");
+            } else if (e.getClickCount() > 1) {
+                System.out.println("Double Click");
+                currentAlbum = getAlbum(label.getText());
+                currentSelection = container;
+                openAlbum();
             }
-
+            
         });
 
         tilePane.getChildren().add(container);

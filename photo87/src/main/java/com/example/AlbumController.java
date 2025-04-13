@@ -48,7 +48,9 @@ public class AlbumController {
     private AlbumPhoto currentPhoto;
     private int currentImageIndex = 0;
     private Stage slideshowStage;
+    private ArrayList<AlbumPhoto> searchResult = null;
     
+
     @FXML
     private TilePane photos;
 
@@ -142,6 +144,9 @@ public class AlbumController {
             enableElement(importButton, false);
             // initialize tagOp dropdown
             tagOp.getItems().addAll("NONE", "AND", "OR");
+            populateTagTypes(tagType1);
+            populateTagTypes(tagType2);
+
             tagOp.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
                 if (newVal != null) {
                     changeTagOp(newVal);   
@@ -172,6 +177,55 @@ public class AlbumController {
     private void createNewTag() {
         openTagDialog(null, null);
     }
+
+    @FXML
+    private void search() {
+        String type1 = tagType1.getValue();
+        String type2 = tagType2.getValue();
+        // tagop
+        String op = tagOp.getValue();
+        // textfields
+        String value1 = tagValue1.getText();
+        String value2 = tagValue2.getText();
+
+        if (type1.isEmpty() || value1.isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Invalid Input");
+            alert.setHeaderText("Tag type or value cannot be empty");
+            // alert.setContentText("Please provide a valid name for the album.");
+            alert.showAndWait();
+            return;
+        }
+
+        if (!op.equals("NONE") && (type2.isEmpty() || value2.isEmpty())) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Invalid Input");
+            alert.setHeaderText("Tag type or value cannot be empty");
+            // alert.setContentText("Please provide a valid name for the album.");
+            alert.showAndWait();
+            return;
+        }
+
+        // create 2 new tag value
+        TagValue tv1 = new TagValue(type1, value1);
+        TagValue tv2 = null;
+        
+        if (!op.equals("NONE")) {
+            tv2 = new TagValue(type2, value2);
+        }
+        
+        searchResult = App.user.searchByTag(tv1, tv2, op);
+        populatePictures();
+        
+        
+    }
+
+    private void populateTagTypes(ChoiceBox<String> choiceBox) {  
+        List<String> tagTypes = App.user.getTagTypes(); // Get the tags from the current photo
+        ObservableList<String> observableTags = FXCollections.observableArrayList(tagTypes); // Convert to ObservableList
+        choiceBox.setItems(observableTags); // Set the items of the TableView
+    }
+    
 
     private void openTagDialog(String tagType, String tagValue) {
          try {
@@ -380,9 +434,19 @@ public class AlbumController {
 
     private void populatePictures() {
         photos.getChildren().clear();
-        for (AlbumPhoto photo : App.currentAlbum.getPhotos()) {
-            addPhotoToTilePane(photos, photo);
+        if (App.currentAlbum == null) {
+            // populate pictures from search results
+            for (AlbumPhoto photo : searchResult) {
+                addPhotoToTilePane(photos, photo);
+            }
+
+        } else {
+            // populate pictures from current album
+            for (AlbumPhoto photo : App.currentAlbum.getPhotos()) {
+                addPhotoToTilePane(photos, photo);
+            }
         }
+        
     }
 
     private void changeTagOp(String newVal) {
@@ -451,8 +515,8 @@ public class AlbumController {
             slideshowImageView.setFitHeight(400);
             slideshowImageView.setPreserveRatio(true);
 
-            Button previousButton = new Button("Previous");
-            Button nextButton = new Button("Next");
+            // Button previousButton = new Button("Previous");
+            // Button nextButton = new Button("Next");
             showSlideshowPhoto(slideshowImageView, currentImageIndex);
 
             Image displayImage = new Image("file:" + imagePath);
@@ -528,9 +592,15 @@ public class AlbumController {
     }
 
     private void showSlideshowPhoto(ImageView imageView, int index) {
-        AlbumPhoto photo = App.currentAlbum.getPhotos().get(index);
+        AlbumPhoto photo;
+        if (App.currentAlbum != null) {
+            photo = App.currentAlbum.getPhotos().get(index);
+        } else {
+            photo = searchResult.get(index);    
+        }
         String imagePath = photo.getPhoto().getPath();
         Image image = new Image("file:" + imagePath);
         imageView.setImage(image);
+
     }
 }

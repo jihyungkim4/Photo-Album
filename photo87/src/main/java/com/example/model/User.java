@@ -1,8 +1,10 @@
 package com.example.model;
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 
 public class User implements Serializable {
@@ -10,7 +12,7 @@ public class User implements Serializable {
     ArrayList<Photo> photos;
     ArrayList<Album> albums;
     DateIndex dateIndex;
-    public TagIndex globalTagIndex; //Global tagIndex for the user
+    TagIndex globalTagIndex;
     ArrayList<String> tagTypes;
 
     public User(String username) {
@@ -55,6 +57,59 @@ public class User implements Serializable {
         return albums;
     }
 
+    public ArrayList<AlbumPhoto> searchByTag(TagValue tv1, TagValue tv2, String tagOp) {
+        // one tag
+        ArrayList<AlbumPhoto> list1 = globalTagIndex.search(tv1);
+        if (tv2 == null) {
+            return list1;
+        }
+        ArrayList<AlbumPhoto> list2 = globalTagIndex.search(tv2);
+        HashSet<AlbumPhoto> set1 = new HashSet<>(list1);
+
+
+        if (tagOp.equals("AND")) {
+            // intersection
+            HashSet<AlbumPhoto> set2 = new HashSet<>(list2);
+            ArrayList<AlbumPhoto> intersection = new ArrayList<AlbumPhoto>();
+            
+            for (AlbumPhoto photo : list2) {
+                if (set1.contains(photo)) {
+                    intersection.add(photo);
+                }
+            }
+            return intersection;
+
+        } else if (tagOp.equals("OR")) { 
+            for (AlbumPhoto photo : list2) {
+                if (!set1.contains(photo)) {
+                    list1.add(photo);
+                }
+            }
+            return list1;
+        } else {
+            return list1;
+        }
+
+    }
+
+    public ArrayList<AlbumPhoto> searchByDate(Instant start, Instant end) {
+        ArrayList<AlbumPhoto> result = new ArrayList<>();
+        HashSet<AlbumPhoto> includedPhotos = new HashSet<>();
+        for (Album album : albums) {
+            for (AlbumPhoto albumPhoto : album.albumPhotos) {
+                if (includedPhotos.contains(albumPhoto)) {
+                    continue;
+                }
+                Instant photoDate = albumPhoto.photo.getFileTime();
+                if (photoDate.compareTo(start) >= 0 && photoDate.compareTo(end) <= 0) {
+                    result.add(albumPhoto);
+                    includedPhotos.add(albumPhoto);
+                }
+            }
+        }
+        return result;
+    }
+
     public Album getAlbum(String name) {
         for (Album album : getAlbums()) {
             if (album.getName().equalsIgnoreCase(name)) {
@@ -74,4 +129,3 @@ public class User implements Serializable {
         albums.remove(album);
     }
 }
-
