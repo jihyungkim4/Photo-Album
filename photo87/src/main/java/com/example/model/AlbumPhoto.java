@@ -1,14 +1,12 @@
 package com.example.model;
 import java.io.Serializable;
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 public class AlbumPhoto implements Serializable {
     Photo photo;
     int index;
-
 
     public AlbumPhoto(Photo photo, int index) {
         this.photo = photo;
@@ -19,7 +17,6 @@ public class AlbumPhoto implements Serializable {
     public Photo getPhoto() {
         return photo;
     }
-    
 
     // Add a tag to this photo
     public void addTag(Tag tag, User user) {
@@ -43,8 +40,8 @@ public class AlbumPhoto implements Serializable {
         return index;
     }
 
-     // Get all tags for this photo
-     public List<Tag> getTags() {
+    // Get all tags for this photo
+    public List<Tag> getTags() {
         return photo.tags; // Return List<Tag> instead of Set<Tag>
     }
 
@@ -52,5 +49,4 @@ public class AlbumPhoto implements Serializable {
     public Instant getFileTime() {
         return photo.getFileTime();
     }
-    
 }

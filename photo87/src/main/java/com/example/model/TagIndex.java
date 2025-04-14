@@ -1,24 +1,11 @@
 package com.example.model;
 
 import java.io.Serializable;
-
-import java.io.*;
 import java.util.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
-import java.io.File;
-import java.io.FileInputStream;
 
 public class TagIndex implements Serializable {
 
-    public Map<TagValue, ArrayList<AlbumPhoto>> tagValueIndex;
-   
+    public Map<TagValue, ArrayList<AlbumPhoto>> tagValueIndex;   
 
     public TagIndex() {
         tagValueIndex = new HashMap<>();

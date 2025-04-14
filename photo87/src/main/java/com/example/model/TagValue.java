@@ -33,7 +33,4 @@ public class TagValue implements Serializable {
     public int hashCode() {
         return Objects.hash(tagType, tagValue);
     }
-
-
-    
 }

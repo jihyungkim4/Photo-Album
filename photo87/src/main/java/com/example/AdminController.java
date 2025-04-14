@@ -44,7 +44,6 @@ public class AdminController {
             App.library.createUserFile(user);
             populateUsers(); 
         }
-
     }
 
     public void deleteUser() {
@@ -55,12 +54,10 @@ public class AdminController {
         }
         App.library.deleteUserFile(selectedUser);
         populateUsers();
-
     }
 
     public void logOut() throws IOException {
         // go back to login form
         App.setRoot("login");
     }
-
 }
