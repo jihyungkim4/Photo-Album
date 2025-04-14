@@ -12,13 +12,11 @@ public class Photo implements Serializable{
     String path;
     Instant fileTime;
     ArrayList<Tag> tags;
-    int albumCounter;
 
     public Photo(String path) throws IOException {
         this.path = path;
         tags = new ArrayList<Tag>();
         fileTime = Files.getLastModifiedTime(Paths.get(path)).toInstant();
-        albumCounter = 0;
     }
 
     public String getCaption() {
@@ -39,9 +37,5 @@ public class Photo implements Serializable{
 
     public ArrayList<Tag> getTags() {
         return tags;
-    }
-
-    public int getAlbumCounter() {
-        return albumCounter;
     }
 }

@@ -101,7 +101,7 @@ public class TagController {
         if (newTagType.equals("Location") || newTagType.equals("Season")) {
             if (oldTagType == null) {
                 for (Tag tag : currentPhoto.getTags()) {
-                    if (tag.getName().equals("Location") || tag.getName().equals("Season")) {
+                    if (tag.getName().equals(newTagType)) {
                         // Raise an issue
                         Alert alert = new Alert(AlertType.ERROR);
                         alert.setTitle("Input Error");
@@ -111,10 +111,22 @@ public class TagController {
                         return;
                     }
                 }    
+            } else {
+                // oldTagType not null -> modify tag
+                if (newTagType != oldTagType) {
+                    for (Tag tag : currentPhoto.getTags()) {
+                        if (tag.getName().equals(newTagType)) {
+                            // Raise an issue
+                            Alert alert = new Alert(AlertType.ERROR);
+                            alert.setTitle("Input Error");
+                            alert.setHeaderText("Tag of type " + newTagType + " already exists.");
+                            alert.setContentText("Cannot include another tag of this type.");
+                            alert.showAndWait();
+                            return;
+                        }
+                    }    
+                }
             }
-            // no duplicate exists so its ok to add a tag.
-            createTag(newTagType, newTagValue);
-            return;
         } 
         // Make sure that there is no tagType / tagValue of the same kind associated with this photo.
         for (Tag tag : currentPhoto.getTags()) {
@@ -128,10 +140,10 @@ public class TagController {
                 return;
             }
         }
-        
         // if everything checks out, create the tag
         createTag(newTagType, newTagValue);
     }
+    
 
     @FXML
     void cancelDialog(ActionEvent event) {

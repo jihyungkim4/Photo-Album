@@ -9,14 +9,12 @@ import java.util.List;
 
 public class User implements Serializable {
     String username;
-    ArrayList<Photo> photos;
     ArrayList<Album> albums;
     TagIndex globalTagIndex;
     ArrayList<String> tagTypes;
 
     public User(String username) {
         this.username = username;
-        photos = new ArrayList<Photo>();
         albums = new ArrayList<Album>();
         globalTagIndex = new TagIndex();
         

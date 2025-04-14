@@ -144,8 +144,6 @@ public class AlbumController {
 
     @FXML
     private void initialize() {
-        //photoView.fitWidthProperty().bind(topBox.widthProperty());
-        //photoView.fitHeightProperty().bind(topBox.heightProperty());
         dateBox.setEditable(false);
         captionBox.setEditable(false);
         if (App.currentAlbum == null) {
@@ -662,7 +660,7 @@ public class AlbumController {
     }
 
     public void startSlideshow() {
-        if (searchResult == null && App.currentAlbum == null) {
+        if (searchResult == null && (App.currentAlbum == null || App.currentAlbum.getPhotos().isEmpty())) {
             return;
         }
 

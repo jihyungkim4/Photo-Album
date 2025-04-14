@@ -1,9 +1,5 @@
 package com.example;
-import com.example.controller.*;
 import java.io.IOException;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.ObjectOutputStream;
 import java.util.Optional;
 
 import com.example.controller.ModifyAlbumController;
@@ -114,8 +110,6 @@ public class App extends Application {
             Scene dialogScene = new Scene(loader.load());  // Load the scene from the FXML
 
             ModifyAlbumController controller = loader.getController();
-            //controller.setCurrentPhoto(currentPhoto);
-            // Create a new Stage for the dialog (this will be a separate window)
             Stage dialogStage = new Stage();
             if (album != null) {
                 dialogStage.setTitle("Modify Album");
