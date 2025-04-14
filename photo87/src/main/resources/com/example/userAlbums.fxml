@@ -69,6 +69,7 @@
                               <Label fx:id="startDate" prefHeight="17.0" prefWidth="254.0" text="Start Date: April 2025" />
                               <Label fx:id="endDate" prefHeight="17.0" prefWidth="254.0" text="End Date: November 2026" />
                               <Label fx:id="description" prefHeight="17.0" prefWidth="253.0" text="Description:" />
+                              <Label fx:id="photoCount" prefHeight="17.0" prefWidth="253.0" text="Photo Count:" />
                            </children>
                         </VBox>
                      </children>

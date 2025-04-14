@@ -65,12 +65,29 @@ public class AlbumSelectController {
             alert.showAndWait();
             return;
         }
+
+        boolean duplicatesFound = false;
+
         for (AlbumPhoto photo : currentPhotos) {
+            if (albumAlreadyHasPhoto(album, photo.getPhoto())) {
+                duplicatesFound = true;
+                continue;
+            }
+
+            album.addPhoto(photo.getPhoto(), App.user);
+            
             if (move_or_copy == 1) {
                 App.currentAlbum.deletePhoto(photo, App.user);
             }
-            album.addPhoto(photo.getPhoto(), App.user);
         }         
+        if (duplicatesFound) {
+            Alert alert = new Alert(AlertType.INFORMATION);
+            alert.setTitle("Duplicate");
+            alert.setHeaderText("Duplicate Skipped");
+            alert.setContentText("One or more photos already existed in the selected album and were skipped.");
+            alert.showAndWait();
+            return;
+        }
         closePopup();
     }
 
@@ -82,6 +99,15 @@ public class AlbumSelectController {
         }
         ObservableList<String> items = FXCollections.observableArrayList(albumNames);
         albumList.setItems(items);
+    }
+
+    private boolean albumAlreadyHasPhoto(Album album, Photo photo) {
+        for (AlbumPhoto ap : album.getPhotos()) {
+            if (ap.getPhoto().getPath().equals(photo.getPath())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void closePopup() {

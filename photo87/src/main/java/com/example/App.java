@@ -158,9 +158,6 @@ public class App extends Application {
         user = null;
         currentAlbum = null;
         App.setRoot("login");
-        stage.setWidth(640);
-        stage.setHeight(480);
-        stage.centerOnScreen();
     }
 
     public static void main(String[] args) {

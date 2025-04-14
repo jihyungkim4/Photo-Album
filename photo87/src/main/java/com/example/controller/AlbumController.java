@@ -324,31 +324,25 @@ public class AlbumController {
 
         if (selectedFiles != null && !selectedFiles.isEmpty()) {
             List<File> uniqueFiles = new ArrayList<>();
-
             for (File file : selectedFiles) {
-                boolean duplicate = false;
-                for (AlbumPhoto ap : App.currentAlbum.getPhotos()) {
-                    Photo p = ap.getPhoto();
-                    if (p.getPath().equals(file.getAbsolutePath())) {
-                        duplicate = true;
-                        break;
-                    }
+                String path = file.getAbsolutePath();
+
+                if (isDuplicatePhoto(file)) {
+                    continue;
                 }
-                if (!duplicate) {
+
+                Photo existingPhoto = App.user.findPhotoInAnyAlbum(path);
+                if (existingPhoto != null) {
+                    App.currentAlbum.addPhoto(existingPhoto, App.user);
+                } else {
                     uniqueFiles.add(file);
                 }
             }
 
             if (!uniqueFiles.isEmpty()) {
                 App.currentAlbum.addPhotos(uniqueFiles);
-                populatePictures();
-            } else {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("No New Photos");
-                alert.setHeaderText(null);
-                alert.setContentText("Photo is already in album.");
-                alert.showAndWait();
             }
+            populatePictures();
 
         } else {
             System.out.println("No files selected.");
@@ -574,6 +568,15 @@ public class AlbumController {
         currentPhoto = null;
     }
 
+    private boolean isDuplicatePhoto(File file) {
+        for (AlbumPhoto ap : App.currentAlbum.getPhotos()) {
+            Photo p = ap.getPhoto();
+            if (p.getPath().equals(file.getAbsolutePath())) {
+                return true;
+            }
+        }
+        return false;
+    }
     
     public void addPhotoToTilePane(TilePane tilePane, AlbumPhoto photo) {
         String imagePath = photo.getPhoto().getPath();

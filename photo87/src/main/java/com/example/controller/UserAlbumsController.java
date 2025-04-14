@@ -50,6 +50,9 @@ public class UserAlbumsController {
     private Label title;
 
     @FXML
+    private Label photoCount;
+
+    @FXML
     private Button modifyButton;
 
     @FXML
@@ -168,6 +171,7 @@ public class UserAlbumsController {
         description.setText("Description:");
         startDate.setText("Start Date:");
         endDate.setText("End Date:");
+        photoCount.setText("Photo Count:");
     }
 
     private void populateAlbums() {
@@ -217,6 +221,7 @@ public class UserAlbumsController {
                 container.setStyle("-fx-padding: 10; -fx-alignment: center; -fx-background-color: #d0d0d0; -fx-border-color: #888; -fx-cursor: hand;");
                 albumName.setText("Album: " + label.getText()); 
                 description.setText("Description: " + currentAlbum.getDescription());
+                photoCount.setText("Photo Count: " + currentAlbum.getPhotos().size());
     
                 if (!currentAlbum.getPhotos().isEmpty()) {
                     Instant earliest = currentAlbum.getPhotos().get(0).getFileTime();
@@ -241,6 +246,8 @@ public class UserAlbumsController {
                 } else {
                     startDate.setText("Start Date: ");
                     endDate.setText("End Date: ");
+                    description.setText("Description: ");
+                    photoCount.setText("Photo Count: 0");
                 }
             } else if (e.getClickCount() > 1) {
                 System.out.println("Double Click");

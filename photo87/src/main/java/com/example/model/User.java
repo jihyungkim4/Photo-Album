@@ -7,6 +7,8 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
+import com.example.App;
+
 public class User implements Serializable {
     String username;
     ArrayList<Album> albums;
@@ -121,4 +123,16 @@ public class User implements Serializable {
     public void deleteAlbum(Album album) {
         albums.remove(album);
     }
+
+        public Photo findPhotoInAnyAlbum(String path) {
+        for (Album album : App.user.getAlbums()) {
+            for (AlbumPhoto ap : album.getPhotos()) {
+                if (ap.getPhoto().getPath().equals(path)) {
+                    return ap.getPhoto();
+                }
+            }
+        }
+        return null;
+    }
+
 }
