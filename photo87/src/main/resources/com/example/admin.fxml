@@ -52,7 +52,7 @@
             <ListView fx:id="userList" layoutX="38.0" layoutY="64.0" prefHeight="200.0" prefWidth="214.0" />
             <Button layoutX="168.0" layoutY="271.0" mnemonicParsing="false" onAction="#createUser" prefHeight="25.0" prefWidth="84.0" text="Create User" />
             <Button layoutX="260.0" layoutY="64.0" mnemonicParsing="false" onAction="#deleteUser" text="Delete User" />
-            <Label fx:id="errorLabel" layoutX="38.0" layoutY="308.0" prefHeight="21.0" prefWidth="477.0" textFill="RED" AnchorPane.rightAnchor="20.0">
+            <Label fx:id="errorLabel" layoutX="38.0" layoutY="308.0" prefHeight="21.0" prefWidth="300.0" textFill="RED">
                <font>
                   <Font size="15.0" />
                </font>

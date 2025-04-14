@@ -32,6 +32,8 @@ public class App extends Application {
         scene = new Scene(loadFXML("login"), 640, 480);
         stage.setScene(scene);
 
+        stage.getIcons().add(new javafx.scene.image.Image(getClass().getResourceAsStream("icon.png")));
+
         stage.setOnCloseRequest(event -> {
             Alert alert = new Alert(AlertType.CONFIRMATION);
             alert.setTitle("Exit Confirmation");
@@ -161,6 +163,9 @@ public class App extends Application {
         user = null;
         currentAlbum = null;
         App.setRoot("login");
+        stage.setWidth(640);
+        stage.setHeight(480);
+        stage.centerOnScreen();
     }
 
     public static void main(String[] args) {
