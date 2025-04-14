@@ -136,6 +136,12 @@ public class AlbumController {
     private Label descriptionLabel;
 
     @FXML
+    private Button copyButton;
+
+    @FXML
+    private Button moveButton;
+
+    @FXML
     private void initialize() {
         //photoView.fitWidthProperty().bind(topBox.widthProperty());
         //photoView.fitHeightProperty().bind(topBox.heightProperty());
@@ -148,6 +154,11 @@ public class AlbumController {
             enableElement(editAlbumButton, false);
             enableElement(albumDescription, false);
             enableElement(descriptionLabel, false);
+            enableElement(copyButton, false);
+            enableElement(moveButton, false);
+
+
+            
 
             // initialize tagOp dropdown
             tagOp.getItems().addAll("NONE", "AND", "OR");
@@ -414,7 +425,7 @@ public class AlbumController {
         Album newAlbum = App.openAlbumDialog(null);
         if (newAlbum != null) {
             for (AlbumPhoto photo : searchResult) {
-                newAlbum.addPhoto(photo.getPhoto());
+                newAlbum.addPhoto(photo.getPhoto(), App.user);
             }
             App.saveUsers();
         }
@@ -455,6 +466,47 @@ public class AlbumController {
         // old tag will be deleted and replaced with new if user confirms
         openTagDialog(tagType, tagValue);
     }
+
+    @FXML
+    void copyPhoto() {
+        openAlbumSelectDialog(0);
+    }
+
+    @FXML
+    void movePhoto() {
+        openAlbumSelectDialog(1);
+
+    }
+
+    // Open album selection dialog
+    void openAlbumSelectDialog(int move_or_copy) {
+    
+        try {
+            // Load the FXML file for the Tag Dialog
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("albumSelect.fxml"));
+            Scene dialogScene = new Scene(loader.load());  // Load the scene from the FXML
+
+            AlbumSelectController controller = loader.getController();
+            controller.setMove_or_copy(move_or_copy);
+            if (currentPhoto != null) {
+                ArrayList<AlbumPhoto> currentPhotos = new ArrayList<>(List.of(currentPhoto));
+                controller.setCurrentPhotos(currentPhotos);
+            }
+          
+            // Create a new Stage for the dialog (this will be a separate window)
+            Stage dialogStage = new Stage();
+            dialogStage.setScene(dialogScene);  // Set the scene to the dialog
+            dialogStage.initModality(Modality.APPLICATION_MODAL);  // Makes the dialog modal (blocks interaction with the main window)
+            dialogStage.showAndWait();  // Display the dialog and wait for the user to close it
+            populatePictures();
+
+
+        } catch (IOException e) {
+            e.printStackTrace();  // Handle exceptions (like file not found or I/O errors)
+        }
+            
+    }     
+              
 
     public void setupColumns() {
         // Set the cell value for the tag type (name of the tag)

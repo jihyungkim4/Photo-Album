@@ -86,7 +86,7 @@
                         </HBox>
                      </children>
                   </VBox>
-                  <VBox alignment="TOP_RIGHT" prefHeight="375.0" prefWidth="330.0">
+                  <VBox alignment="TOP_RIGHT" prefHeight="375.0" prefWidth="330.0" HBox.hgrow="ALWAYS">
                      <children>
                         <Label alignment="TOP_RIGHT" text="Photo Library">
                            <font>

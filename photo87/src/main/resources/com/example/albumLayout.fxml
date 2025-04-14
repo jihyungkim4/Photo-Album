@@ -108,10 +108,9 @@
                                           <DatePicker fx:id="endDate" prefHeight="25.0" prefWidth="90.0" />
                                           <Button mnemonicParsing="false" onAction="#search" prefHeight="25.0" prefWidth="73.0" text="Search">
                                              <HBox.margin>
-                                                <Insets />
+                                                <Insets left="97.0" />
                                              </HBox.margin>
                                           </Button>
-                                          <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="73.0" text="Reset" />
                                        </children>
                                        <padding>
                                           <Insets left="7.0" top="5.0" />
@@ -149,8 +148,8 @@
                               <HBox prefHeight="46.0" prefWidth="425.0" spacing="10.0" VBox.vgrow="NEVER">
                                  <children>
                                     <Button fx:id="importButton" mnemonicParsing="false" onAction="#importPhotos" text="Import" />
-                                    <Button mnemonicParsing="false" text="Move" />
-                                    <Button mnemonicParsing="false" text="Copy" />
+                                    <Button fx:id="moveButton" mnemonicParsing="false" onAction="#movePhoto" text="Move" />
+                                    <Button fx:id="copyButton" mnemonicParsing="false" onAction="#copyPhoto" text="Copy" />
                                     <Button mnemonicParsing="false" onAction="#deletePhoto" text="Delete" />
                                     <Button fx:id="slideshowButton" mnemonicParsing="false" onAction="#startSlideshow" text="Slideshow" />
                                     <Button mnemonicParsing="false" onAction="#newAlbumFromSearch" text="New Album">

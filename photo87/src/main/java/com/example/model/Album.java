@@ -39,9 +39,12 @@ public class Album implements Serializable {
         }
     }
 
-    public void addPhoto(Photo photo) {
+    public void addPhoto(Photo photo, User user) {
         AlbumPhoto albumPhoto = new AlbumPhoto(photo, albumPhotos.size());
         albumPhotos.add(albumPhoto);
+        for (Tag tag : photo.getTags()) {
+            user.globalTagIndex.addTag(tag, albumPhoto);
+        }
     }
 
     public void addPhotos(List<File> photoFiles) throws IOException {
