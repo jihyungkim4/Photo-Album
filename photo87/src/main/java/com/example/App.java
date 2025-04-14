@@ -1,11 +1,12 @@
 package com.example;
-
+import com.example.controller.*;
 import java.io.IOException;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
 import java.util.Optional;
 
+import com.example.controller.ModifyAlbumController;
 import com.example.model.*;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -51,7 +52,7 @@ public class App extends Application {
         stage.show();
     }
 
-    static void setRoot(String fxml) throws IOException {
+    public static void setRoot(String fxml) throws IOException {
         scene.setRoot(loadFXML(fxml));
         stage.setWidth(1000);  // Set the desired width
         stage.setHeight(700); // Set the desired height

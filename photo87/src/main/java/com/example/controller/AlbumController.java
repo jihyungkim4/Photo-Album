@@ -1,4 +1,5 @@
-package com.example;
+package com.example.controller;
+import com.example.App;
 import com.example.model.*;
 
 import java.io.File;
@@ -287,7 +288,7 @@ public class AlbumController {
     private void openTagDialog(String tagType, String tagValue) {
          try {
             // Load the FXML file for the Tag Dialog
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("newTag.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/newTag.fxml"));
             Scene dialogScene = new Scene(loader.load());  // Load the scene from the FXML
 
             TagController controller = loader.getController();
@@ -483,7 +484,7 @@ public class AlbumController {
     
         try {
             // Load the FXML file for the Tag Dialog
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("albumSelect.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/albumSelect.fxml"));
             Scene dialogScene = new Scene(loader.load());  // Load the scene from the FXML
 
             AlbumSelectController controller = loader.getController();

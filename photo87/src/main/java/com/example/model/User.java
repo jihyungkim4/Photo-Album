@@ -11,7 +11,6 @@ public class User implements Serializable {
     String username;
     ArrayList<Photo> photos;
     ArrayList<Album> albums;
-    DateIndex dateIndex;
     TagIndex globalTagIndex;
     ArrayList<String> tagTypes;
 
@@ -19,7 +18,6 @@ public class User implements Serializable {
         this.username = username;
         photos = new ArrayList<Photo>();
         albums = new ArrayList<Album>();
-        dateIndex = new DateIndex();
         globalTagIndex = new TagIndex();
         
         tagTypes = new ArrayList<>(Arrays.asList("Location", "Person", "Season", "Event", "Activity", "Object", "Animal"));
@@ -30,7 +28,6 @@ public class User implements Serializable {
         Album album = new Album(albumName);
         albums.add(album);
         return album;
-
     }
 
     public List<String> getTagTypes() {
@@ -66,7 +63,6 @@ public class User implements Serializable {
         ArrayList<AlbumPhoto> list2 = globalTagIndex.search(tv2);
         HashSet<AlbumPhoto> set1 = new HashSet<>(list1);
 
-
         if (tagOp.equals("AND")) {
             // intersection
             HashSet<AlbumPhoto> set2 = new HashSet<>(list2);
@@ -89,7 +85,6 @@ public class User implements Serializable {
         } else {
             return list1;
         }
-
     }
 
     public ArrayList<AlbumPhoto> searchByDate(Instant start, Instant end) {

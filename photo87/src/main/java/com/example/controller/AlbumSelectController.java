@@ -1,7 +1,8 @@
-package com.example;
+package com.example.controller;
 
 import java.util.ArrayList;
 
+import com.example.App;
 import com.example.model.*;
 
 import javafx.collections.FXCollections;

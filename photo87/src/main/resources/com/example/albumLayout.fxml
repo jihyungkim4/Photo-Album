@@ -54,7 +54,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox minHeight="400.0" minWidth="500.0" prefHeight="631.0" prefWidth="859.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.AlbumController">
+<VBox minHeight="400.0" minWidth="500.0" prefHeight="631.0" prefWidth="859.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.controller.AlbumController">
   <children>
       <AnchorPane prefHeight="38.0" prefWidth="710.0">
          <children>

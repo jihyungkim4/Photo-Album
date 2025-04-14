@@ -1,5 +1,6 @@
-package com.example;
+package com.example.controller;
 
+import com.example.App;
 import com.example.model.Album;
 
 import javafx.event.ActionEvent;

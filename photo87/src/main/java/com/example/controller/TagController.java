@@ -1,7 +1,8 @@
-package com.example;
+package com.example.controller;
 import java.util.List;
 import java.util.Optional;
 
+import com.example.App;
 import com.example.model.AlbumPhoto;
 import com.example.model.Tag;
 

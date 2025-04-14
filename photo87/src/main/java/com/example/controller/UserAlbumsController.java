@@ -1,4 +1,4 @@
-package com.example;
+package com.example.controller;
 import com.example.model.TagIndex;
 import com.example.model.Tag;
 
@@ -10,6 +10,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Optional;
 
+import com.example.App;
 import com.example.model.Album;
 import com.example.model.AlbumPhoto;
 import com.example.model.Photo;
@@ -114,6 +115,8 @@ public class UserAlbumsController {
         App.openAlbumDialog(currentAlbum);
         albumName.setText("Name: " + currentAlbum.getName());
         description.setText("Description: " + currentAlbum.getDescription());
+        clearAlbumSelection();
+        populateAlbums();
         
     }
 
@@ -131,7 +134,7 @@ public class UserAlbumsController {
 
         Album newAlbum = App.openAlbumDialog(null);
         if (newAlbum != null) {
-            addPhotoToTilePane(albums, "folder.png", newAlbum.getName());
+            addPhotoToTilePane(albums, "/com/example/folder.png", newAlbum.getName());
         }
     }
 
@@ -176,8 +179,9 @@ public class UserAlbumsController {
     }
 
     private void populateAlbums() {
+        albums.getChildren().clear();
         for (Album album : App.user.getAlbums()) {
-            addPhotoToTilePane(albums, "folder.png", album.getName());
+            addPhotoToTilePane(albums, "/com/example/folder.png", album.getName());
         }
     }
 

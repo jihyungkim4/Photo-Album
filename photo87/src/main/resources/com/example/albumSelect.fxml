@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="283.0" prefWidth="355.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.AlbumSelectController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="283.0" prefWidth="355.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.controller.AlbumSelectController">
    <children>
       <ListView fx:id="albumList" layoutX="38.0" layoutY="42.0" prefHeight="214.0" prefWidth="200.0" AnchorPane.bottomAnchor="27.0" AnchorPane.leftAnchor="38.0" AnchorPane.rightAnchor="117.0" AnchorPane.topAnchor="42.0" />
       <Label layoutX="38.0" layoutY="25.0" text="Albums" />

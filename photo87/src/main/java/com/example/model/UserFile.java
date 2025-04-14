@@ -1,6 +1,5 @@
 package com.example.model;
 import java.io.IOException;
-import java.io.File;
 import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;

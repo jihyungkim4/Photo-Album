@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
 public class Album implements Serializable {
     String albumName;
     String description;
@@ -82,5 +81,4 @@ public class Album implements Serializable {
     public void setDescription(String description){
         this.description = description;
     }
-
 }

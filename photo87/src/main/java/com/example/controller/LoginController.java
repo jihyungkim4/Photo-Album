@@ -1,6 +1,8 @@
-package com.example;
+package com.example.controller;
 
 import java.io.IOException;
+
+import com.example.App;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
