@@ -30,12 +30,12 @@ public class UserFile implements Serializable {
             
             User user = new User(username);
             Album album = user.createAlbum("stock");
-            album.addPhoto(new Photo(Paths.get("photo87/data/bambi.jpg").toAbsolutePath().toString()), user);
-            album.addPhoto(new Photo(Paths.get("photo87/data/bluejay.jpg").toAbsolutePath().toString()), user);
-            album.addPhoto(new Photo(Paths.get("photo87/data/beautifulsea.jpg").toAbsolutePath().toString()), user); 
-            album.addPhoto(new Photo(Paths.get("photo87/data/bunnycat.jpg").toAbsolutePath().toString()), user);
-            album.addPhoto(new Photo(Paths.get("photo87/data/roundbird.jpg").toAbsolutePath().toString()), user);
-            album.addPhoto(new Photo(Paths.get("photo87/data/naples.jpg").toAbsolutePath().toString()), user);
+            album.addPhoto(new Photo(Paths.get("photo87/data/bambi.png").toAbsolutePath().toString()), user);
+            album.addPhoto(new Photo(Paths.get("photo87/data/bluejay.png").toAbsolutePath().toString()), user);
+            album.addPhoto(new Photo(Paths.get("photo87/data/beautifulsea.png").toAbsolutePath().toString()), user); 
+            album.addPhoto(new Photo(Paths.get("photo87/data/bunnycat.png").toAbsolutePath().toString()), user);
+            album.addPhoto(new Photo(Paths.get("photo87/data/roundbird.png").toAbsolutePath().toString()), user);
+            album.addPhoto(new Photo(Paths.get("photo87/data/naples.png").toAbsolutePath().toString()), user);
             out.writeObject(user);
 
         } catch (IOException e) {
