@@ -9,12 +9,23 @@ import java.util.List;
 
 import com.example.App;
 
+/**
+ * Organizes all of the information specific to a single user.
+ * Library can have multiple Users.
+ * @author Julia and Jihyung
+ */
 public class User implements Serializable {
     String username;
     ArrayList<Album> albums;
     TagIndex globalTagIndex;
     ArrayList<String> tagTypes;
 
+    /**
+     * Constructor for the User.
+     * Creates a preset list of tag types, empty array of Albums
+     * and a new TagIndex.
+     * @param username
+     */
     public User(String username) {
         this.username = username;
         albums = new ArrayList<Album>();
@@ -24,6 +35,11 @@ public class User implements Serializable {
         Collections.sort(tagTypes);
     }
 
+    /**
+     * Creates a new album for a specific user.
+     * @param albumName
+     * @return Album
+     */
     public Album createAlbum(String albumName) {
         Album album = new Album(albumName);
         albums.add(album);
@@ -34,6 +50,9 @@ public class User implements Serializable {
         return tagTypes;
     }
 
+    /**
+     * Checks if a user already has a specified tag type.
+     */
     public boolean hasTagType(String tagType) {
         for (String tagT : tagTypes) {
             if (tagT.equals(tagType)) {
@@ -43,6 +62,10 @@ public class User implements Serializable {
         return false;
     }
 
+    /**
+     * Adds a new tag type to the preset list. Sorts the list
+     * so that it can be displayed in order.
+     */
     public void addTagType(String tagType) {
         if (!hasTagType(tagType)) {
             tagTypes.add(tagType);
@@ -54,6 +77,16 @@ public class User implements Serializable {
         return albums;
     }
 
+    /**
+     * Implements the search by tag functionality and returns a list of unique photos 
+     * satisfying the search criteria. 
+     * Implements intersection and union depending on the value of tagOp and
+     * if tv2 is not null. 
+     * @param tv1
+     * @param tv2
+     * @param tagOp
+     * @return An array
+     */
     public ArrayList<AlbumPhoto> searchByTag(TagValue tv1, TagValue tv2, String tagOp) {
         // one tag
         ArrayList<AlbumPhoto> list1 = globalTagIndex.search(tv1);
@@ -61,7 +94,6 @@ public class User implements Serializable {
             return list1;
         }
         ArrayList<AlbumPhoto> list2 = globalTagIndex.search(tv2);
-        //HashSet<AlbumPhoto> set1 = new HashSet<>(list1);
 
         if (tagOp.equals("AND")) {
             HashSet<String> photoPaths1 = new HashSet<>();
@@ -105,6 +137,12 @@ public class User implements Serializable {
         return list1;
     }
 
+    /**
+     * Implements search based on photo last modified times which are stored as instants
+     * @param start
+     * @param end
+     * @return A list of photos that are inside of the indicated start - end range
+     */
     public ArrayList<AlbumPhoto> searchByDate(Instant start, Instant end) {
         ArrayList<AlbumPhoto> result = new ArrayList<>();
         HashSet<AlbumPhoto> includedPhotos = new HashSet<>();
@@ -136,6 +174,12 @@ public class User implements Serializable {
         return username;
     }
 
+    /**
+     * Creates a new Album containing all the Photos in the list.
+     * @param albumName
+     * @param photos
+     * @return
+     */
     public Album createAlbumFromPhotos(String albumName, ArrayList<Photo> photos) {
         Album album = new Album(albumName, photos);
         albums.add(album);
@@ -146,7 +190,12 @@ public class User implements Serializable {
         albums.remove(album);
     }
 
-        public Photo findPhotoInAnyAlbum(String path) {
+    /**
+     * Searches all user albums for Photo with this filepath.
+     * @param path
+     * @return
+     */
+    public Photo findPhotoInAnyAlbum(String path) {
         for (Album album : App.user.getAlbums()) {
             for (AlbumPhoto ap : album.getPhotos()) {
                 if (ap.getPhoto().getPath().equals(path)) {

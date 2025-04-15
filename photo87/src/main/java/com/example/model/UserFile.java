@@ -5,10 +5,22 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.nio.file.Paths;
 
+/**
+ * This file represents the specific User so that is may be saved
+ * through the Library.
+ * @author Julia and Jihyung
+ */
 public class UserFile implements Serializable {
     public String username;
     public String path;
 
+    /**
+     * This constructor creates a new User and creates a new Album that
+     * contains the stock photos for the program. Saves the user with
+     * the specified path.
+     * @param username
+     * @param path
+     */
     public UserFile(String username, String path) {
         this.username = username;
         this.path = path;
@@ -30,6 +42,9 @@ public class UserFile implements Serializable {
         }
     }
 
+    /**
+     * Saves the user. 
+     */
     public void save(User user) throws IOException {
         try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(path))) {
             out.writeObject(user);

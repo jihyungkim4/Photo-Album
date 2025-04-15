@@ -43,6 +43,11 @@ import javafx.scene.control.TableView;
 
 public class AlbumController {
 
+
+    /**
+     * Controller class for the FXML layout representing the inside of an album.
+     * @author Julia and Jihyung
+     */
     private VBox currentSelection;
     private AlbumPhoto currentPhoto;
     private int currentImageIndex = 0;
@@ -198,6 +203,9 @@ public class AlbumController {
         openTagDialog(null, null);
     }
 
+    /**
+     * Initiates the search an populates the photos with the results of a search.
+     */
     @FXML
     private void search() {
         if (tagSelect.isSelected()) {
@@ -291,7 +299,9 @@ public class AlbumController {
     }
 
     
-
+    /**
+     * Opens the dialog box that allows User to modify and create new tags.
+     */
     private void openTagDialog(String tagType, String tagValue) {
          try {
             // Load the FXML file for the Tag Dialog
@@ -352,17 +362,10 @@ public class AlbumController {
                 App.currentAlbum.addPhotos(uniqueFiles);
             }
             populatePictures();
-
-        } else {
-            System.out.println("No files selected.");
         }
     }
 
-    // @FXML
-    // private void initializeTagTable() {
-    //     List<Tag> currentTags = currentPhoto.getTags();
-    // }
-
+    
     @FXML
     private void editAlbum(ActionEvent event) {
         App.openAlbumDialog(App.currentAlbum);
@@ -392,7 +395,6 @@ public class AlbumController {
 
     @FXML
     private void dateSearchSelected() {
-        System.out.println("Date Search Selected");
         // enable startDate, endDate
         // disable tagType1, tagType2, tagValue1, tagValue2, tagOp
         startDate.setDisable(false);
@@ -406,7 +408,6 @@ public class AlbumController {
 
     @FXML
     private void tagSearchSelected() {
-        System.out.println("Tag Search Selected");
         // disable startDate, endDate
         // enable tagType1, tagType2, tagValue1, tagValue2, tagOp
         startDate.setDisable(true);
@@ -480,7 +481,9 @@ public class AlbumController {
 
     }
 
-    // Open album selection dialog
+    /**
+     * Open album selection dialog
+     */ 
     void openAlbumSelectDialog(int move_or_copy) {
     
         try {
@@ -617,7 +620,6 @@ public class AlbumController {
         });
 
         container.setOnMouseClicked(e -> {
-            System.out.println("photo selection clicked");
             if (currentSelection != null) {
                 currentSelection.setStyle("-fx-padding: 10; -fx-alignment: center;"); // Clear back to default
                 if (currentSelection == container) {
@@ -636,8 +638,6 @@ public class AlbumController {
             slideshowImageView.setFitHeight(400);
             slideshowImageView.setPreserveRatio(true);
 
-            // Button previousButton = new Button("Previous");
-            // Button nextButton = new Button("Next");
             showSlideshowPhoto(slideshowImageView, currentImageIndex);
 
             Image displayImage = new Image("file:" + imagePath);
@@ -649,9 +649,6 @@ public class AlbumController {
             photoView.setFitHeight(container.getHeight());
             photoView.fitWidthProperty().bind(topBox.widthProperty());
             photoView.fitHeightProperty().bind(topBox.heightProperty());
-            
-            System.out.println("photoView: " + photoView.getImage().getWidth());
-            System.out.println("Container: " + container.getWidth());
             currentPhoto = photo;
 
             // javaFx button for edit/create/delete need to be enabled because a currentPhoto is selected.
@@ -665,7 +662,6 @@ public class AlbumController {
             populateTags(currentPhoto);
 
             container.setStyle("-fx-padding: 10; -fx-alignment: center; -fx-background-color: #d0d0d0; -fx-border-color: #888; -fx-cursor: hand;");
-            //albumName.setText("Album: " + label.getText()); 
         });
 
         tilePane.getChildren().add(container);

@@ -6,6 +6,14 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.io.Serializable;
 
+/**
+ * Represents a unique Photo linking to a specific file on user's computer.
+ * A Photo can appear in multiple albums through several AlbumPhotos objects
+ * that reference the same Photo.
+ * 
+ * User provided tags and caption are visible in any album that the photo appears.
+ * @author Julia and Jihyung
+ */
 public class Photo implements Serializable{
 
     String caption;

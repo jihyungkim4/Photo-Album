@@ -3,6 +3,11 @@ package com.example.model;
 import java.io.Serializable;
 import java.util.Objects;
 
+/**
+ * Represents a key with a specific tag type and tag value.
+ * TagValue can be used as a hashmap key. 
+ * @author Julia and Jihyung
+ */
 public class TagValue implements Serializable {
 
     String tagType;
