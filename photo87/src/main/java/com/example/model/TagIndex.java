@@ -26,6 +26,16 @@ public class TagIndex implements Serializable {
     }
 
     public ArrayList<AlbumPhoto> search(TagValue tv) {
-        return tagValueIndex.getOrDefault(tv, new ArrayList<>());
+        ArrayList<AlbumPhoto> searchResults = tagValueIndex.getOrDefault(tv, new ArrayList<>());
+        ArrayList<AlbumPhoto> uniqueResults = new ArrayList<>();
+        HashSet<String> includedPhotos = new HashSet<>();
+        for (AlbumPhoto photo : searchResults) {
+            String path = photo.getPhoto().getPath();
+            if (!includedPhotos.contains(path)) {
+                includedPhotos.add(path);
+                uniqueResults.add(photo);
+            }
+        }
+        return uniqueResults;
     }
 }
