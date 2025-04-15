@@ -152,7 +152,7 @@
                                     <Button fx:id="copyButton" mnemonicParsing="false" onAction="#copyPhoto" text="Copy" />
                                     <Button mnemonicParsing="false" onAction="#deletePhoto" text="Delete" />
                                     <Button fx:id="slideshowButton" mnemonicParsing="false" onAction="#startSlideshow" text="Slideshow" />
-                                    <Button mnemonicParsing="false" onAction="#newAlbumFromSearch" text="New Album">
+                                    <Button fx:id="newAlbumButton" mnemonicParsing="false" onAction="#newAlbumFromSearch" text="New Album">
                                        <HBox.margin>
                                           <Insets />
                                        </HBox.margin>

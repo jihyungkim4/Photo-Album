@@ -143,6 +143,10 @@ public class AlbumController {
     private Button moveButton;
 
     @FXML
+    private Button newAlbumButton;
+
+
+    @FXML
     private void initialize() {
         dateBox.setEditable(false);
         captionBox.setEditable(false);
@@ -155,9 +159,6 @@ public class AlbumController {
             enableElement(descriptionLabel, false);
             enableElement(copyButton, false);
             enableElement(moveButton, false);
-
-
-            
 
             // initialize tagOp dropdown
             tagOp.getItems().addAll("NONE", "AND", "OR");
@@ -177,6 +178,7 @@ public class AlbumController {
             albumName.setText(App.currentAlbum.getName());
             albumDescription.setText(App.currentAlbum.getDescription());
             enableElement(searchPanel, false);
+            enableElement(newAlbumButton, false);
             // set tag buttons to disabled initially
             newTag.setDisable(true);
             editTag.setDisable(true);
