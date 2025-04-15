@@ -14,36 +14,78 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ListView;
 import javafx.stage.Stage;
 
+/**
+ * Controller class for selecting an album to move or copy photos to.
+ * Handles user interaction for confirming or canceling the action.
+ * 
+ * @author Julia Gurando
+ * @author Jihyung Kim
+ */
+
 public class AlbumSelectController {
 
+    /** List of currently selected photos to move or copy. */
     private ArrayList<AlbumPhoto> currentPhotos;
+    /** Flag to indicate whether operation is move (1) or copy (0). */
     public int move_or_copy;
 
+    /**
+     * Sets the move_or_copy flag.
+     * 
+     * @param move_or_copy 1 if moving photos, 0 if copying
+     */
     public void setMove_or_copy(int move_or_copy) {
         this.move_or_copy = move_or_copy;
     }
 
+    /**
+     * Initializes the controller by populating the list of albums.
+     */
     public void initialize() {
         populateAlbums();
         
     }
 
+    /**
+     * Sets the current photos that will be moved or copied.
+     * 
+     * @param currentPhotos list of selected photos
+     */
     public void setCurrentPhotos(ArrayList<AlbumPhoto> currentPhotos) {
         this.currentPhotos = currentPhotos;
     }
 
+    /**
+     * Gets the current list of photos to move or copy.
+     * 
+     * @return list of selected photos
+     */
     public ArrayList<AlbumPhoto> getCurrentPhotos() {
         return currentPhotos;
     }
 
+     /**
+     * List view displaying all albums available for selection.
+     */
     @FXML
     private ListView<String> albumList;
 
+    /**
+     * Cancels the album selection operation and closes the popup.
+     * 
+     * @param event the action event triggered by the cancel button
+     */
     @FXML
     void cancel(ActionEvent event) {
         closePopup();
     }
 
+    /**
+     * Confirms the selected album and moves or copies the photos to it.
+     * Skips duplicate photos and notifies the user.
+     * 
+     * @param event the action event triggered by the confirm button
+     */
     @FXML
     void confirm(ActionEvent event) {
         // if nothing is selected, throw up an alert
@@ -91,6 +133,9 @@ public class AlbumSelectController {
         closePopup();
     }
 
+    /**
+     * Populates the album list view with the names of all user albums.
+     */
     private void populateAlbums() {
         ArrayList<Album> albums = App.user.getAlbums();
         ArrayList<String> albumNames = new ArrayList<>();
@@ -101,6 +146,13 @@ public class AlbumSelectController {
         albumList.setItems(items);
     }
 
+    /**
+     * Checks if a given photo already exists in an album.
+     * 
+     * @param album the album to check
+     * @param photo the photo to check for
+     * @return true if the photo is already in the album, false otherwise
+     */
     private boolean albumAlreadyHasPhoto(Album album, Photo photo) {
         for (AlbumPhoto ap : album.getPhotos()) {
             if (ap.getPhoto().getPath().equals(photo.getPath())) {
@@ -110,6 +162,9 @@ public class AlbumSelectController {
         return false;
     }
 
+    /**
+     * Closes the popup window.
+     */
     private void closePopup() {
         Stage stage = (Stage) albumList.getScene().getWindow();
         stage.close();  // Close the current window

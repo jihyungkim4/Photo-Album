@@ -26,41 +26,73 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 
+/**
+ * Controller class for managing the user's albums view.
+ * Handles album creation, modification, deletion, navigation, and selection.
+ * 
+ * Allows users to view album details, select an album to open, or create a new one.
+ * 
+ * @author Julia Gurando
+ * @author Jihyung Kim
+ */
 public class UserAlbumsController {
 
+    /** Currently selected album container UI element */
     private VBox currentSelection;
+
+    /** Currently selected album */
     private Album currentAlbum;
     
+    /** UI label for displaying album name */
     @FXML
     private Label albumName;
 
+    /** TilePane containing all album thumbnails */
     @FXML
     private TilePane albums;
 
+    /** UI label for displaying album description */
     @FXML
     private Label description;
 
+    /** UI label for displaying end date of photos in the selected album */
     @FXML
     private Label endDate;
 
+    /** UI label for displaying start date of photos in the selected album */
     @FXML
     private Label startDate;
 
+    /** UI label for displaying the screen title */
     @FXML
     private Label title;
 
+    /** UI label for displaying the number of photos in the selected album */
     @FXML
     private Label photoCount;
 
+    /** Button used to modify selected album details */
     @FXML
     private Button modifyButton;
 
+    /**
+     * Initializes the album screen by clearing selection and populating albums.
+     */
     @FXML
     private void initialize() {
         clearAlbumSelection();
         populateAlbums(); 
+        if (App.user != null) {
+            title.setText(App.user.getUsername() + "'s Photo Library");
+        }
     }
 
+    /**
+     * Deletes the currently selected album after confirmation.
+     * Displays a warning if no album is selected.
+     * 
+     * @param event ActionEvent triggering the deletion
+     */
     @FXML
     void deleteAlbum(ActionEvent event) {
 
@@ -87,20 +119,36 @@ public class UserAlbumsController {
             clearAlbumSelection();
 
             App.saveUsers();
-            System.out.println("Album deleted: " + temp);
         }
     }
 
+    /**
+     * Logs out the current user and returns to the login screen.
+     * 
+     * @param event ActionEvent triggering logout
+     * @throws IOException if FXML cannot be loaded
+     */
     @FXML
     void logOut(ActionEvent event) throws IOException {
         App.logOut();
     }
 
+    /**
+     * Placeholder for future implementation of album merging.
+     * 
+     * @param event ActionEvent triggering the merge
+     */
     @FXML
     void merge(ActionEvent event) {
 
     }
 
+    /**
+     * Opens a dialog to modify the selected album.
+     * Displays an error if no album is selected.
+     * 
+     * @param event ActionEvent triggering the modification
+     */
     @FXML
     private void modifyAlbum(ActionEvent event) {
         if (currentAlbum == null) {
@@ -115,6 +163,11 @@ public class UserAlbumsController {
         
     }
 
+    /**
+     * Displays an error message using an alert box.
+     * 
+     * @param message Error message to show
+     */
     private void showError(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
@@ -123,7 +176,12 @@ public class UserAlbumsController {
         alert.showAndWait();
     }
 
-
+    /**
+     * Opens a dialog to create a new album.
+     * Adds the new album to the tile pane if created successfully.
+     * 
+     * @param event ActionEvent triggering the album creation
+     */
     @FXML
     void newAlbum(ActionEvent event) {
 
@@ -133,6 +191,9 @@ public class UserAlbumsController {
         }
     }
 
+    /**
+     * Opens the currently selected album if any is selected.
+     */
     @FXML
     void openAlbum() {
         if (currentAlbum == null) {
@@ -143,11 +204,20 @@ public class UserAlbumsController {
             App.setRoot("albumLayout");
             description.setText("Description: " + currentAlbum.getDescription());
         } catch (IOException e) {
-            // todo
-            System.out.println(e.getMessage());
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText("Failed to open album view.");
+            alert.showAndWait();
         }
     }
 
+    /**
+     * Navigates to the search view for global photo search.
+     * 
+     * @param event ActionEvent triggering the search
+     * @throws IOException if FXML cannot be loaded
+     */
     @FXML
     void search(ActionEvent event) throws IOException {
         App.currentAlbum = null;
@@ -155,6 +225,12 @@ public class UserAlbumsController {
 
     }
 
+    /**
+     * Returns the album with the specified name from the user's album list.
+     * 
+     * @param albumName Name of the album to search
+     * @return Album instance if found, otherwise null
+     */
     private Album getAlbum(String albumName) {
         for (Album album : App.user.getAlbums()) {
             if (album.getName().equals(albumName)) {
@@ -164,6 +240,9 @@ public class UserAlbumsController {
         return null;
     }
 
+    /**
+     * Clears the current album selection and resets UI labels.
+     */
     private void clearAlbumSelection() {
         currentAlbum = null;
         currentSelection = null;
@@ -174,6 +253,9 @@ public class UserAlbumsController {
         photoCount.setText("Photo Count:");
     }
 
+    /**
+     * Populates the albums tile pane with the user's albums.
+     */
     private void populateAlbums() {
         albums.getChildren().clear();
         for (Album album : App.user.getAlbums()) {
@@ -181,6 +263,14 @@ public class UserAlbumsController {
         }
     }
 
+    /**
+     * Adds a visual representation of an album to the specified TilePane.
+     * Handles mouse hover and click events to select or open albums.
+     * 
+     * @param tilePane The TilePane to add the album to
+     * @param imagePath Path to the album image icon
+     * @param labelText Text to display
+     */
     public void addPhotoToTilePane(TilePane tilePane, String imagePath, String labelText) {
         Image image = new Image(getClass().getResource(imagePath).toExternalForm());
 
@@ -208,7 +298,6 @@ public class UserAlbumsController {
 
         container.setOnMouseClicked(e -> {
             if (e.getClickCount() == 1) {
-                System.out.println("album selection clicked");
                 if (currentSelection != null) {
                     currentSelection.setStyle("-fx-padding: 10; -fx-alignment: center;"); // Clear back to default
                     if (currentSelection == container) {
@@ -250,7 +339,6 @@ public class UserAlbumsController {
                     photoCount.setText("Photo Count: 0");
                 }
             } else if (e.getClickCount() > 1) {
-                System.out.println("Double Click");
                 currentAlbum = getAlbum(label.getText());
                 currentSelection = container;
                 openAlbum();

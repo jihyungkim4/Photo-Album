@@ -131,6 +131,10 @@ public class User implements Serializable {
         }
         return null;
     }
+    
+    public String getUsername(){
+        return username;
+    }
 
     public Album createAlbumFromPhotos(String albumName, ArrayList<Photo> photos) {
         Album album = new Album(albumName, photos);

@@ -11,28 +11,53 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 
+/**
+ * Controller for the Admin view.
+ * <p>
+ * This controller handles the admin-level functionality, including creating/deleting users and logging out.
+ * </p>
+ * 
+ * @author Julia Gurando
+ * @author Jihyung Kim
+ */
+
 public class AdminController {
 
+    /** Label to display error messages to the user */
     @FXML
     private Label errorLabel;
 
+    /** Text field for entering the username of a new user */
     @FXML
     private TextField newUserName;
 
+    /** List view showing all existing users */
     @FXML
     private ListView<String> userList;
 
-     @FXML
+    /**
+     * Initializes the admin view controller.
+     * Populates the list of users, excluding the admin.
+     */
+    @FXML
     private void initialize() {
         populateUsers();
     }
 
+    /**
+     * Populates the list of users in the list view.
+     * Filters out the "admin" account from the display.
+     */
     private void populateUsers() {
         ObservableList<String> items = FXCollections.observableArrayList(App.library.getUserNames());
         items.remove("admin");
         userList.setItems(items);
     }
 
+    /**
+     * Creates a new user if the username is valid.
+     * Displays error messages for invalid input or duplicate usernames.
+     */
     public void createUser() {
         String user = newUserName.getText();
         if (user.isEmpty()) {
@@ -48,6 +73,10 @@ public class AdminController {
         }
     }
 
+    /**
+     * Deletes the selected user from the list.
+     * Displays an error if no user is selected.
+     */
     public void deleteUser() {
         String selectedUser = userList.getSelectionModel().getSelectedItem();
         if (selectedUser == null) {
@@ -58,6 +87,11 @@ public class AdminController {
         populateUsers();
     }
 
+    /**
+     * Logs out the current admin and returns to the login screen.
+     * 
+     * @throws IOException if the login screen can't be loaded
+     */
     public void logOut() throws IOException {
         // go back to login form
         App.setRoot("login");

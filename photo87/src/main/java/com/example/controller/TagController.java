@@ -18,32 +18,59 @@ import javafx.stage.Stage;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 
+/**
+ * Controller class for creating and modifying tags associated with photos.
+ * Allows users to assign tag types and values to a selected photo, create new tag types,
+ * and validate input constraints based on tag uniqueness rules.
+ * 
+ * @author Julia Gurando
+ * @author Jihyung Kim
+ */
 public class TagController {
+
+    /** The photo currently being tagged. */
     private AlbumPhoto currentPhoto;
+
+    /** The original tag type (used during tag editing). */
     private String oldTagType;
+
+    /** The original tag value (used during tag editing). */
     private String oldTagValue;
+
+    /** Flag to indicate whether changes were made that require refreshing the photo view. */
     private boolean needRefresh = false;
 
+    /** Button to cancel the tag dialog. */
     @FXML
     private Button cancelButton;
 
+    /** Button to confirm and apply tag creation/modification. */
     @FXML
     private Button confirmButton;
 
+    /** Button to create a new custom tag type. */
     @FXML
     private Button newTagType;
 
+    /** Choice box to select from available tag types. */
     @FXML
     private ChoiceBox<String> tagTypeDrop;
 
+    /** Text field to enter the value of the tag. */
     @FXML
     private TextField tagValueInput;
 
+    /**
+     * Initializes the controller by populating the tag types for the user.
+     */
     @FXML
     public void initialize() {
         populateTagTypes();
     }
 
+    /**
+     * Opens a dialog to create a new tag type and adds it to the user's list if valid.
+     */
     @FXML
     public void createTagType() {
         TextInputDialog dialog = new TextInputDialog();
@@ -66,7 +93,6 @@ public class TagController {
         }
 
         if (App.user.hasTagType(name)) {
-            System.out.println("Alert: Tag type already exists");
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Tag Type Already Exists");
             alert.setHeaderText("A tag type with this name already exists.");
@@ -79,6 +105,10 @@ public class TagController {
         tagTypeDrop.setValue(name);
     }
     
+    /**
+     * Creates a new tag for the current photo after validating input and tag type rules.
+     * Prevents duplicates and multiple tags of exclusive types like "Location" or "Season".
+     */
     @FXML
     public void createNewTag() { 
         
@@ -144,31 +174,60 @@ public class TagController {
         createTag(newTagType, newTagValue);
     }
     
-
+    /**
+     * Cancels the tag dialog and closes the popup.
+     * 
+     * @param event the event triggered by the cancel button
+     */
     @FXML
     void cancelDialog(ActionEvent event) {
         closePopup();
     }
 
+    /**
+     * Sets the photo for which the tag is being created or modified.
+     * 
+     * @param photo the photo being tagged
+     */
     public void setCurrentPhoto(AlbumPhoto photo) {
         this.currentPhoto = photo;
-        System.out.println("Received current photo: " + currentPhoto);
     }
     
+    /**
+     * Sets the original tag type if modifying an existing tag.
+     * 
+     * @param tagType the existing tag type
+     */
     public void setOldTagType(String tagType) {
         this.oldTagType = tagType;
         tagTypeDrop.setValue(tagType);
     }
 
+    /**
+     * Sets the original tag value if modifying an existing tag.
+     * 
+     * @param tagValue the existing tag value
+     */
     public void setOldTagValue(String tagValue) {
         this.oldTagValue = tagValue;
         tagValueInput.setText(tagValue);
     }
 
+    /**
+     * Returns whether the dialog action requires the photo view to refresh.
+     * 
+     * @return true if changes were made, false otherwise
+     */
     public boolean getNeedRefresh() {
         return needRefresh;
     }
 
+    /**
+     * Creates a new tag and adds it to the current photo, replacing the old tag if editing.
+     * 
+     * @param tagType the type of the new tag
+     * @param tagValue the value of the new tag
+     */
     private void createTag(String tagType, String tagValue) {
         Tag newTag = new Tag(currentPhoto.getPhoto(), tagType, tagValue);
         if (oldTagType != null) {
@@ -179,12 +238,18 @@ public class TagController {
         needRefresh = true;
     }
 
+    /**
+     * Populates the tag type dropdown with the user's available tag types.
+     */
     private void populateTagTypes() {  
         List<String> tagTypes = App.user.getTagTypes(); // Get the tags from the current photo
         ObservableList<String> observableTags = FXCollections.observableArrayList(tagTypes); // Convert to ObservableList
         tagTypeDrop.setItems(observableTags); // Set the items of the TableView
     }
     
+    /**
+     * Closes the current popup window.
+     */
     private void closePopup() {
         Stage stage = (Stage) tagValueInput.getScene().getWindow();
         stage.close();  // Close the current window
