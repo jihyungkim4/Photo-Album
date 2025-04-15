@@ -8,7 +8,8 @@ import java.nio.file.Paths;
 /**
  * This file represents the specific User so that is may be saved
  * through the Library.
- * @author Julia and Jihyung
+ * @author Julia Gurando
+ * @author Jihyung Kim
  */
 public class UserFile implements Serializable {
     public String username;
@@ -29,12 +30,12 @@ public class UserFile implements Serializable {
             
             User user = new User(username);
             Album album = user.createAlbum("stock");
-            album.addPhoto(new Photo(Paths.get("photo87/stock/bambi.jpg").toAbsolutePath().toString()), user);
-            album.addPhoto(new Photo(Paths.get("photo87/stock/bluejay.jpg").toAbsolutePath().toString()), user);
-            album.addPhoto(new Photo(Paths.get("photo87/stock/beautifulsea.jpg").toAbsolutePath().toString()), user); 
-            album.addPhoto(new Photo(Paths.get("photo87/stock/bunnycat.jpg").toAbsolutePath().toString()), user);
-            album.addPhoto(new Photo(Paths.get("photo87/stock/roundbird.jpg").toAbsolutePath().toString()), user);
-            album.addPhoto(new Photo(Paths.get("photo87/stock/naples.jpg").toAbsolutePath().toString()), user);
+            album.addPhoto(new Photo(Paths.get("photo87/data/bambi.jpg").toAbsolutePath().toString()), user);
+            album.addPhoto(new Photo(Paths.get("photo87/data/bluejay.jpg").toAbsolutePath().toString()), user);
+            album.addPhoto(new Photo(Paths.get("photo87/data/beautifulsea.jpg").toAbsolutePath().toString()), user); 
+            album.addPhoto(new Photo(Paths.get("photo87/data/bunnycat.jpg").toAbsolutePath().toString()), user);
+            album.addPhoto(new Photo(Paths.get("photo87/data/roundbird.jpg").toAbsolutePath().toString()), user);
+            album.addPhoto(new Photo(Paths.get("photo87/data/naples.jpg").toAbsolutePath().toString()), user);
             out.writeObject(user);
 
         } catch (IOException e) {

@@ -15,7 +15,8 @@ import java.util.ArrayList;
  * The highest level object for organizing all information for an
  * instance of the program. Maintains global information such as
  * list of users.
- * @author Julia and Jihyung
+ * @author Julia Gurando
+ * @author Jihyung Kim
  */
 public class Library implements Serializable {
 

@@ -8,7 +8,8 @@ import java.util.List;
  * AlbumPhoto is a class that links a Photo to a specific Album.
  * AlbumPhoto allows photos to be arranged in explicit order
  * within the Album.
- * @author Julia and Jihyung
+ * @author Julia Gurando
+ * @author Jihyung Kim
  */
 public class AlbumPhoto implements Serializable {
     Photo photo;

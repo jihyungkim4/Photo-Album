@@ -14,7 +14,7 @@ import javafx.scene.control.ButtonType;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-public class App extends Application {
+public class Photos extends Application {
     private static Scene scene;
     public static Library library;
     private static String libraryFile = "library.dat";
@@ -25,7 +25,7 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        App.stage = stage;
+        Photos.stage = stage;
         scene = new Scene(loadFXML("login"), 640, 480);
         stage.setScene(scene);
 
@@ -41,7 +41,7 @@ public class App extends Application {
             if (result.isEmpty() || result.get() != ButtonType.OK) {
                 event.consume();
             } else {
-                App.save();
+                Photos.save();
             }
         });
         
@@ -55,7 +55,7 @@ public class App extends Application {
     }
 
     static Parent loadFXML(String fxml) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(fxml + ".fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(Photos.class.getResource(fxml + ".fxml"));
         return fxmlLoader.load();
     }
 
@@ -71,12 +71,10 @@ public class App extends Application {
         }
 
         if (userFile == null) {
-            System.out.println("User not found" + username);
             return;
         }
 
         try {
-            System.out.println("userFile.path: " + userFile.path);
             user = Library.loadUser(userFile.path);
             setRoot("userAlbums");
         }
@@ -106,7 +104,7 @@ public class App extends Application {
     public static Album openAlbumDialog(Album album) {
         try {
             // Load the FXML file for the Tag Dialog
-            FXMLLoader loader = new FXMLLoader(App.class.getResource("modifyAlbum.fxml"));
+            FXMLLoader loader = new FXMLLoader(Photos.class.getResource("modifyAlbum.fxml"));
             Scene dialogScene = new Scene(loader.load());  // Load the scene from the FXML
 
             ModifyAlbumController controller = loader.getController();
@@ -130,7 +128,7 @@ public class App extends Application {
             if (albumName != null) {
                 if (album == null) {
                     // create new
-                    album = App.user.createAlbum(albumName);
+                    album = Photos.user.createAlbum(albumName);
                     if (!albumDescription.isEmpty()) {
                         album.setDescription(albumDescription);
                     }
@@ -139,7 +137,7 @@ public class App extends Application {
                     album.setName(albumName);
                     album.setDescription(albumDescription);
                 }
-                App.saveUsers();
+                Photos.saveUsers();
             }
             
         } catch (IOException e) {
@@ -153,16 +151,16 @@ public class App extends Application {
     }
 
     public static void logOut() throws IOException {
-        App.save();
+        Photos.save();
         userFile = null;
         user = null;
         currentAlbum = null;
-        App.setRoot("login");
+        Photos.setRoot("login");
     }
 
     public static void main(String[] args) {
         try {
-            App.library = Library.load(libraryFile);
+            Photos.library = Library.load(libraryFile);
         } catch (Exception e) {
             e.printStackTrace();
         }

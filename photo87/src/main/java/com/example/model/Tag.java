@@ -5,7 +5,8 @@ import java.io.Serializable;
  * Tag is a single pair of Tag name and Tag value strings, a Photo
  * can have multiple tags but no two tags for the same photo 
  * can have the same name, value combination.
- * @author Julia and Jihyung
+ * @author Julia Gurando
+ * @author Jihyung Kim
  */
 public class Tag implements Serializable {
     Photo photo;

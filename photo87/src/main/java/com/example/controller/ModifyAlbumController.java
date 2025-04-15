@@ -1,6 +1,6 @@
 package com.example.controller;
 
-import com.example.App;
+import com.example.Photos;
 import com.example.model.Album;
 
 import javafx.event.ActionEvent;
@@ -74,7 +74,7 @@ public class ModifyAlbumController {
         }
         
         if (modifyAlbum == null || modifyAlbum.getName() != name) {
-            for (Album album : App.user.getAlbums()) {
+            for (Album album : Photos.user.getAlbums()) {
                 if (album == modifyAlbum) {
                     continue;
                 }

@@ -2,7 +2,7 @@ package com.example.controller;
 
 import java.io.IOException;
 
-import com.example.App;
+import com.example.Photos;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -29,7 +29,7 @@ public class LoginController {
      */
     @FXML
     private void initialize() {
-        ObservableList<String> items = FXCollections.observableArrayList(App.library.getUserNames());
+        ObservableList<String> items = FXCollections.observableArrayList(Photos.library.getUserNames());
         userList.setItems(items);
     }
 
@@ -46,9 +46,9 @@ public class LoginController {
             return;
         }
         if (selectedItem.equals("admin")) {
-            App.setRoot("admin");
+            Photos.setRoot("admin");
         } else {
-            App.login(selectedItem);
+            Photos.login(selectedItem);
         }
     }
 
@@ -59,6 +59,6 @@ public class LoginController {
      */
     @FXML
     private void exit() throws IOException {
-        App.stage.fireEvent(new WindowEvent(App.stage, WindowEvent.WINDOW_CLOSE_REQUEST));
+        Photos.stage.fireEvent(new WindowEvent(Photos.stage, WindowEvent.WINDOW_CLOSE_REQUEST));
     }
 }

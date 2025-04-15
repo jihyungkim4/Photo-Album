@@ -2,7 +2,7 @@ package com.example.controller;
 
 import java.io.IOException;
 
-import com.example.App;
+import com.example.Photos;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -49,7 +49,7 @@ public class AdminController {
      * Filters out the "admin" account from the display.
      */
     private void populateUsers() {
-        ObservableList<String> items = FXCollections.observableArrayList(App.library.getUserNames());
+        ObservableList<String> items = FXCollections.observableArrayList(Photos.library.getUserNames());
         items.remove("admin");
         userList.setItems(items);
     }
@@ -64,11 +64,11 @@ public class AdminController {
             errorLabel.setText("Error: Username cannot be blank");
         } else if (user.equals("admin")) {
             errorLabel.setText("Error: Admin user cannot be created");
-        } else if (App.library.getUserNames().contains(user)) {
+        } else if (Photos.library.getUserNames().contains(user)) {
             errorLabel.setText("Error: User already exists");
         } else {
             // create new user yay!!
-            App.library.createUserFile(user);
+            Photos.library.createUserFile(user);
             populateUsers(); 
         }
     }
@@ -83,7 +83,7 @@ public class AdminController {
             errorLabel.setText("Error: No user selected");
             return;
         }
-        App.library.deleteUserFile(selectedUser);
+        Photos.library.deleteUserFile(selectedUser);
         populateUsers();
     }
 
@@ -94,6 +94,6 @@ public class AdminController {
      */
     public void logOut() throws IOException {
         // go back to login form
-        App.setRoot("login");
+        Photos.setRoot("login");
     }
 }

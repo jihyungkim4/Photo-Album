@@ -7,12 +7,13 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
-import com.example.App;
+import com.example.Photos;
 
 /**
  * Organizes all of the information specific to a single user.
  * Library can have multiple Users.
- * @author Julia and Jihyung
+ * @author Julia Gurando
+ * @author Jihyung Kim
  */
 public class User implements Serializable {
     String username;
@@ -196,7 +197,7 @@ public class User implements Serializable {
      * @return
      */
     public Photo findPhotoInAnyAlbum(String path) {
-        for (Album album : App.user.getAlbums()) {
+        for (Album album : Photos.user.getAlbums()) {
             for (AlbumPhoto ap : album.getPhotos()) {
                 if (ap.getPhoto().getPath().equals(path)) {
                     return ap.getPhoto();

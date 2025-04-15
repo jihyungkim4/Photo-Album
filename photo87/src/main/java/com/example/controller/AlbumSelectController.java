@@ -2,7 +2,7 @@ package com.example.controller;
 
 import java.util.ArrayList;
 
-import com.example.App;
+import com.example.Photos;
 import com.example.model.*;
 
 import javafx.collections.FXCollections;
@@ -98,8 +98,8 @@ public class AlbumSelectController {
             alert.showAndWait();
             return;
         }
-        Album album = App.user.getAlbum(selectedAlbum);
-        if (App.currentAlbum == null || App.currentAlbum == album) {
+        Album album = Photos.user.getAlbum(selectedAlbum);
+        if (Photos.currentAlbum == null || Photos.currentAlbum == album) {
             Alert alert = new Alert(AlertType.ERROR);
             alert.setTitle("Invalid Input");
             alert.setHeaderText("Invalid Album");
@@ -116,10 +116,10 @@ public class AlbumSelectController {
                 continue;
             }
 
-            album.addPhoto(photo.getPhoto(), App.user);
+            album.addPhoto(photo.getPhoto(), Photos.user);
             
             if (move_or_copy == 1) {
-                App.currentAlbum.deletePhoto(photo, App.user);
+                Photos.currentAlbum.deletePhoto(photo, Photos.user);
             }
         }         
         if (duplicatesFound) {
@@ -137,7 +137,7 @@ public class AlbumSelectController {
      * Populates the album list view with the names of all user albums.
      */
     private void populateAlbums() {
-        ArrayList<Album> albums = App.user.getAlbums();
+        ArrayList<Album> albums = Photos.user.getAlbums();
         ArrayList<String> albumNames = new ArrayList<>();
         for (Album album : albums) {
             albumNames.add(album.getName());

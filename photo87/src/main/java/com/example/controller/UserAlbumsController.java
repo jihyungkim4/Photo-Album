@@ -10,7 +10,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Optional;
 
-import com.example.App;
+import com.example.Photos;
 import com.example.model.Album;
 import com.example.model.AlbumPhoto;
 import com.example.model.Photo;
@@ -82,8 +82,8 @@ public class UserAlbumsController {
     private void initialize() {
         clearAlbumSelection();
         populateAlbums(); 
-        if (App.user != null) {
-            title.setText(App.user.getUsername() + "'s Photo Library");
+        if (Photos.user != null) {
+            title.setText(Photos.user.getUsername() + "'s Photo Library");
         }
     }
 
@@ -113,12 +113,12 @@ public class UserAlbumsController {
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
             String temp = currentAlbum.getName();
-            App.user.deleteAlbum(currentAlbum);
+            Photos.user.deleteAlbum(currentAlbum);
 
             albums.getChildren().remove(currentSelection);
             clearAlbumSelection();
 
-            App.saveUsers();
+            Photos.saveUsers();
         }
     }
 
@@ -130,7 +130,7 @@ public class UserAlbumsController {
      */
     @FXML
     void logOut(ActionEvent event) throws IOException {
-        App.logOut();
+        Photos.logOut();
     }
 
     /**
@@ -155,7 +155,7 @@ public class UserAlbumsController {
             showError("No album selected.");
             return;
         }
-        App.openAlbumDialog(currentAlbum);
+        Photos.openAlbumDialog(currentAlbum);
         albumName.setText("Name: " + currentAlbum.getName());
         description.setText("Description: " + currentAlbum.getDescription());
         clearAlbumSelection();
@@ -185,7 +185,7 @@ public class UserAlbumsController {
     @FXML
     void newAlbum(ActionEvent event) {
 
-        Album newAlbum = App.openAlbumDialog(null);
+        Album newAlbum = Photos.openAlbumDialog(null);
         if (newAlbum != null) {
             addPhotoToTilePane(albums, "/com/example/folder.png", newAlbum.getName());
         }
@@ -199,9 +199,9 @@ public class UserAlbumsController {
         if (currentAlbum == null) {
             return;
         }
-        App.currentAlbum = currentAlbum;
+        Photos.currentAlbum = currentAlbum;
         try {
-            App.setRoot("albumLayout");
+            Photos.setRoot("albumLayout");
             description.setText("Description: " + currentAlbum.getDescription());
         } catch (IOException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -220,8 +220,8 @@ public class UserAlbumsController {
      */
     @FXML
     void search(ActionEvent event) throws IOException {
-        App.currentAlbum = null;
-        App.setRoot("albumLayout");
+        Photos.currentAlbum = null;
+        Photos.setRoot("albumLayout");
 
     }
 
@@ -232,7 +232,7 @@ public class UserAlbumsController {
      * @return Album instance if found, otherwise null
      */
     private Album getAlbum(String albumName) {
-        for (Album album : App.user.getAlbums()) {
+        for (Album album : Photos.user.getAlbums()) {
             if (album.getName().equals(albumName)) {
                 return album;
             }
@@ -258,7 +258,7 @@ public class UserAlbumsController {
      */
     private void populateAlbums() {
         albums.getChildren().clear();
-        for (Album album : App.user.getAlbums()) {
+        for (Album album : Photos.user.getAlbums()) {
             addPhotoToTilePane(albums, "/com/example/folder.png", album.getName());
         }
     }

@@ -1,5 +1,5 @@
 package com.example.controller;
-import com.example.App;
+import com.example.Photos;
 import com.example.model.*;
 
 import java.io.File;
@@ -41,13 +41,13 @@ import javafx.stage.Stage;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 
+ /**
+ * Controller class for the FXML layout representing the inside of an album.
+ * @author Julia Gurando
+ * @author Jihyung Kim
+ */
 public class AlbumController {
 
-
-    /**
-     * Controller class for the FXML layout representing the inside of an album.
-     * @author Julia and Jihyung
-     */
     private VBox currentSelection;
     private AlbumPhoto currentPhoto;
     private int currentImageIndex = 0;
@@ -151,11 +151,16 @@ public class AlbumController {
     private Button newAlbumButton;
 
 
+    /**
+     * This form is used for two screens, search and the inner album layout.
+     * In these modes different controls are enabled and disabled but the common
+     * functionality is useful in both situations.
+     */
     @FXML
     private void initialize() {
         dateBox.setEditable(false);
         captionBox.setEditable(false);
-        if (App.currentAlbum == null) {
+        if (Photos.currentAlbum == null) {
             // search mode
             albumName.setText("Search Photos");
             enableElement(importButton, false);
@@ -180,8 +185,8 @@ public class AlbumController {
             
         } else {
             // album mode
-            albumName.setText(App.currentAlbum.getName());
-            albumDescription.setText(App.currentAlbum.getDescription());
+            albumName.setText(Photos.currentAlbum.getName());
+            albumDescription.setText(Photos.currentAlbum.getDescription());
             enableElement(searchPanel, false);
             enableElement(newAlbumButton, false);
             // set tag buttons to disabled initially
@@ -191,11 +196,6 @@ public class AlbumController {
             populatePictures();
         }
         
-    }
-
-    @FXML
-    private void switchToSecondary() throws IOException {
-        App.setRoot("secondary");
     }
 
     @FXML
@@ -244,7 +244,7 @@ public class AlbumController {
                 tv2 = new TagValue(type2, value2);
             }
             
-            searchResult = App.user.searchByTag(tv1, tv2, op);
+            searchResult = Photos.user.searchByTag(tv1, tv2, op);
             
         } else if (dateSelect.isSelected()) {
             // search by date
@@ -266,7 +266,7 @@ public class AlbumController {
             Instant startInstant = zdtstart.toInstant();
             Instant endInstant = zdtend.toInstant();
 
-            searchResult = App.user.searchByDate(startInstant, endInstant);
+            searchResult = Photos.user.searchByDate(startInstant, endInstant);
         }
         Map<String, AlbumPhoto> uniquePhotoMap = new LinkedHashMap<>();
         for (AlbumPhoto ap : searchResult) {
@@ -280,20 +280,23 @@ public class AlbumController {
         
     }
 
+    /**
+     * Deletes currently selected photo.
+     */
     @FXML
     private void deletePhoto() {
         if (currentPhoto == null) {
             return;
         }
-        if (App.currentAlbum != null)  {
-            App.currentAlbum.deletePhoto(currentPhoto, App.user);
+        if (Photos.currentAlbum != null)  {
+            Photos.currentAlbum.deletePhoto(currentPhoto, Photos.user);
             resetPhotoSelection();
             populatePictures();
         }
     }
 
     private void populateTagTypes(ChoiceBox<String> choiceBox) {  
-        List<String> tagTypes = App.user.getTagTypes(); // Get the tags from the current photo
+        List<String> tagTypes = Photos.user.getTagTypes(); // Get the tags from the current photo
         ObservableList<String> observableTags = FXCollections.observableArrayList(tagTypes); // Convert to ObservableList
         choiceBox.setItems(observableTags); // Set the items of the TableView
     }
@@ -339,7 +342,7 @@ public class AlbumController {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Select Images to Import");
         fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg", "*.gif", "*.bmp"));
-        List<File> selectedFiles = fileChooser.showOpenMultipleDialog(App.stage);
+        List<File> selectedFiles = fileChooser.showOpenMultipleDialog(Photos.stage);
 
         if (selectedFiles != null && !selectedFiles.isEmpty()) {
             List<File> uniqueFiles = new ArrayList<>();
@@ -350,16 +353,16 @@ public class AlbumController {
                     continue;
                 }
 
-                Photo existingPhoto = App.user.findPhotoInAnyAlbum(path);
+                Photo existingPhoto = Photos.user.findPhotoInAnyAlbum(path);
                 if (existingPhoto != null) {
-                    App.currentAlbum.addPhoto(existingPhoto, App.user);
+                    Photos.currentAlbum.addPhoto(existingPhoto, Photos.user);
                 } else {
                     uniqueFiles.add(file);
                 }
             }
 
             if (!uniqueFiles.isEmpty()) {
-                App.currentAlbum.addPhotos(uniqueFiles);
+                Photos.currentAlbum.addPhotos(uniqueFiles);
             }
             populatePictures();
         }
@@ -368,9 +371,9 @@ public class AlbumController {
     
     @FXML
     private void editAlbum(ActionEvent event) {
-        App.openAlbumDialog(App.currentAlbum);
-        albumName.setText(App.currentAlbum.getName());
-        albumDescription.setText(App.currentAlbum.getDescription()); 
+        Photos.openAlbumDialog(Photos.currentAlbum);
+        albumName.setText(Photos.currentAlbum.getName());
+        albumDescription.setText(Photos.currentAlbum.getDescription()); 
     }
 
     @FXML
@@ -388,7 +391,7 @@ public class AlbumController {
         result.ifPresent(newCaption -> {
             currentPhoto.getPhoto().setCaption(newCaption.trim());
             captionBox.setText(currentPhoto.getPhoto().getCaption());
-            App.saveUsers();
+            Photos.saveUsers();
             populatePictures();
         });
     }
@@ -425,24 +428,24 @@ public class AlbumController {
         if (searchResult == null) {
             return;
         }
-        Album newAlbum = App.openAlbumDialog(null);
+        Album newAlbum = Photos.openAlbumDialog(null);
         if (newAlbum != null) {
             for (AlbumPhoto photo : searchResult) {
-                newAlbum.addPhoto(photo.getPhoto(), App.user);
+                newAlbum.addPhoto(photo.getPhoto(), Photos.user);
             }
-            App.saveUsers();
+            Photos.saveUsers();
         }
     }
 
     @FXML
     void logOut(ActionEvent event) throws IOException {
-        App.logOut();
+        Photos.logOut();
     }
 
     @FXML
     private void backToAlbums() throws IOException {
-        App.currentAlbum = null;
-        App.setRoot("userAlbums");
+        Photos.currentAlbum = null;
+        Photos.setRoot("userAlbums");
     }
 
     @FXML
@@ -453,7 +456,7 @@ public class AlbumController {
         }
         String nameValue = tagTypeTable.getCellData(selectedIndex);
         String tagValue = tagValueTable.getCellData(selectedIndex);
-        currentPhoto.deleteTag(nameValue, tagValue, App.user);
+        currentPhoto.deleteTag(nameValue, tagValue, Photos.user);
         populateTags(currentPhoto);
     }
 
@@ -534,9 +537,12 @@ public class AlbumController {
         element.setManaged(enable);
     }
 
+    /**
+     * Clears and repopulates the pictures for the current album or the search result.
+     */
     private void populatePictures() {
         photos.getChildren().clear();
-        if (App.currentAlbum == null) {
+        if (Photos.currentAlbum == null) {
             // populate pictures from search results
             for (AlbumPhoto photo : searchResult) {
                 addPhotoToTilePane(photos, photo);
@@ -544,7 +550,7 @@ public class AlbumController {
 
         } else {
             // populate pictures from current album
-            for (AlbumPhoto photo : App.currentAlbum.getPhotos()) {
+            for (AlbumPhoto photo : Photos.currentAlbum.getPhotos()) {
                 addPhotoToTilePane(photos, photo);
             }
         }
@@ -581,7 +587,7 @@ public class AlbumController {
     }
 
     private boolean isDuplicatePhoto(File file) {
-        for (AlbumPhoto ap : App.currentAlbum.getPhotos()) {
+        for (AlbumPhoto ap : Photos.currentAlbum.getPhotos()) {
             Photo p = ap.getPhoto();
             if (p.getPath().equals(file.getAbsolutePath())) {
                 return true;
@@ -590,6 +596,10 @@ public class AlbumController {
         return false;
     }
     
+    /**
+     * Contains lambda functions that are used to select and deselect Photos 
+     * in the album. 
+     */
     public void addPhotoToTilePane(TilePane tilePane, AlbumPhoto photo) {
         String imagePath = photo.getPhoto().getPath();
         String labelText = photo.getPhoto().getCaption();
@@ -667,8 +677,12 @@ public class AlbumController {
         tilePane.getChildren().add(container);
     }
 
+    /**
+     * Opens up a new window to display the pictures inside of the current album, or 
+     * the search results.
+     */
     public void startSlideshow() {
-        if (searchResult == null && (App.currentAlbum == null || App.currentAlbum.getPhotos().isEmpty())) {
+        if (searchResult == null && (Photos.currentAlbum == null || Photos.currentAlbum.getPhotos().isEmpty())) {
             return;
         }
 
@@ -696,10 +710,10 @@ public class AlbumController {
 
         nextButton.setOnAction(e -> {
             int listSize = 0;
-            if (App.currentAlbum == null) {
+            if (Photos.currentAlbum == null) {
                 listSize = searchResult.size();
             } else {
-                listSize = App.currentAlbum.getPhotos().size();
+                listSize = Photos.currentAlbum.getPhotos().size();
             }
             
             if (currentImageIndex < listSize - 1) {
@@ -720,8 +734,8 @@ public class AlbumController {
 
     private void showSlideshowPhoto(ImageView imageView, int index) {
         AlbumPhoto photo;
-        if (App.currentAlbum != null) {
-            photo = App.currentAlbum.getPhotos().get(index);
+        if (Photos.currentAlbum != null) {
+            photo = Photos.currentAlbum.getPhotos().get(index);
         } else {
             photo = searchResult.get(index);    
         }

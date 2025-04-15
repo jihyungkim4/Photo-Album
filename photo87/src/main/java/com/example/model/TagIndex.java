@@ -6,7 +6,8 @@ import java.util.*;
 /**
  * TagIndex represents searchable collection of tags allowing
  * a set of pictures with given tags to be found quickly.
- * @author Julia and Jihyung
+ * @author Julia Gurando
+ * @author Jihyung Kim
  */
 public class TagIndex implements Serializable {
 

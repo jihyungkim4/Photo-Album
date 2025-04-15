@@ -6,7 +6,8 @@ import java.util.Objects;
 /**
  * Represents a key with a specific tag type and tag value.
  * TagValue can be used as a hashmap key. 
- * @author Julia and Jihyung
+ * @author Julia Gurando
+ * @author Jihyung Kim
  */
 public class TagValue implements Serializable {
 

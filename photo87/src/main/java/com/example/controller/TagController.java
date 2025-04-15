@@ -2,7 +2,7 @@ package com.example.controller;
 import java.util.List;
 import java.util.Optional;
 
-import com.example.App;
+import com.example.Photos;
 import com.example.model.AlbumPhoto;
 import com.example.model.Tag;
 
@@ -92,7 +92,7 @@ public class TagController {
             return;
         }
 
-        if (App.user.hasTagType(name)) {
+        if (Photos.user.hasTagType(name)) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Tag Type Already Exists");
             alert.setHeaderText("A tag type with this name already exists.");
@@ -100,7 +100,7 @@ public class TagController {
             alert.showAndWait();
             return;
         }
-        App.user.addTagType(name);
+        Photos.user.addTagType(name);
         populateTagTypes();
         tagTypeDrop.setValue(name);
     }
@@ -231,9 +231,9 @@ public class TagController {
     private void createTag(String tagType, String tagValue) {
         Tag newTag = new Tag(currentPhoto.getPhoto(), tagType, tagValue);
         if (oldTagType != null) {
-            currentPhoto.deleteTag(oldTagType, oldTagValue, App.user);
+            currentPhoto.deleteTag(oldTagType, oldTagValue, Photos.user);
         }
-        currentPhoto.addTag(newTag, App.user);
+        currentPhoto.addTag(newTag, Photos.user);
         closePopup();
         needRefresh = true;
     }
@@ -242,7 +242,7 @@ public class TagController {
      * Populates the tag type dropdown with the user's available tag types.
      */
     private void populateTagTypes() {  
-        List<String> tagTypes = App.user.getTagTypes(); // Get the tags from the current photo
+        List<String> tagTypes = Photos.user.getTagTypes(); // Get the tags from the current photo
         ObservableList<String> observableTags = FXCollections.observableArrayList(tagTypes); // Convert to ObservableList
         tagTypeDrop.setItems(observableTags); // Set the items of the TableView
     }

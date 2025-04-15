@@ -8,7 +8,8 @@ import java.util.List;
  * Album class represents a single album in user's library
  * User can have multiple albums and each album contain
  * Zero or more pictires.
- * @author Julia and Jihyung
+ * @author Julia Gurando
+ * @author Jihyung Kim
  */
 
 public class Album implements Serializable {

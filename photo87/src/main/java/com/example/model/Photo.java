@@ -12,7 +12,8 @@ import java.io.Serializable;
  * that reference the same Photo.
  * 
  * User provided tags and caption are visible in any album that the photo appears.
- * @author Julia and Jihyung
+ * @author Julia Gurando
+ * @author Jihyung Kim
  */
 public class Photo implements Serializable{
 
