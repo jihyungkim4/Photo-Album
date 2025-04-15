@@ -258,7 +258,14 @@ public class AlbumController {
 
             searchResult = App.user.searchByDate(startInstant, endInstant);
         }
-        
+        Map<String, AlbumPhoto> uniquePhotoMap = new LinkedHashMap<>();
+        for (AlbumPhoto ap : searchResult) {
+            String photoPath = ap.getPhoto().getPath();
+            if (!uniquePhotoMap.containsKey(photoPath)) {
+                uniquePhotoMap.put(photoPath, ap);
+            }
+        }
+        searchResult = new ArrayList<>(uniquePhotoMap.values());
         populatePictures();
         
     }

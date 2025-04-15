@@ -61,30 +61,48 @@ public class User implements Serializable {
             return list1;
         }
         ArrayList<AlbumPhoto> list2 = globalTagIndex.search(tv2);
-        HashSet<AlbumPhoto> set1 = new HashSet<>(list1);
+        //HashSet<AlbumPhoto> set1 = new HashSet<>(list1);
 
         if (tagOp.equals("AND")) {
-            // intersection
-            HashSet<AlbumPhoto> set2 = new HashSet<>(list2);
-            ArrayList<AlbumPhoto> intersection = new ArrayList<AlbumPhoto>();
-            
-            for (AlbumPhoto photo : list2) {
-                if (set1.contains(photo)) {
-                    intersection.add(photo);
+            HashSet<String> photoPaths1 = new HashSet<>();
+            for (AlbumPhoto ap : list1) {
+                photoPaths1.add(ap.getPhoto().getPath());
+            }
+
+            ArrayList<AlbumPhoto> intersection = new ArrayList<>();
+            HashSet<String> addedPaths = new HashSet<>();
+
+            for (AlbumPhoto ap : list2) {
+                String path = ap.getPhoto().getPath();
+                if (photoPaths1.contains(path) && !addedPaths.contains(path)) {
+                    intersection.add(ap);
+                    addedPaths.add(path); // prevent duplicate photos in result
                 }
             }
+
             return intersection;
 
         } else if (tagOp.equals("OR")) { 
-            for (AlbumPhoto photo : list2) {
-                if (!set1.contains(photo)) {
-                    list1.add(photo);
+            HashSet<String> seenPaths = new HashSet<>();
+            ArrayList<AlbumPhoto> result = new ArrayList<>();
+
+            for (AlbumPhoto ap : list1) {
+                String path = ap.getPhoto().getPath();
+                if (seenPaths.add(path)) {
+                    result.add(ap);
                 }
             }
-            return list1;
-        } else {
-            return list1;
+
+            for (AlbumPhoto ap : list2) {
+                String path = ap.getPhoto().getPath();
+                if (seenPaths.add(path)) {
+                    result.add(ap);
+                }
+            }
+
+            return result;
         }
+        return list1;
     }
 
     public ArrayList<AlbumPhoto> searchByDate(Instant start, Instant end) {
