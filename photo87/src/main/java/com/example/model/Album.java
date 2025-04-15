@@ -4,6 +4,11 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+/**
+ * Album class represents a single album in user's library
+ * User can have multiple albums and each album contain
+ * Zero or more pictires.
+ */
 public class Album implements Serializable {
     String albumName;
     String description;
