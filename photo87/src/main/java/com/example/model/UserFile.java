@@ -1,4 +1,5 @@
 package com.example.model;
+
 import java.io.IOException;
 import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
@@ -8,6 +9,7 @@ import java.nio.file.Paths;
 /**
  * This file represents the specific User so that is may be saved
  * through the Library.
+ * 
  * @author Julia Gurando
  * @author Jihyung Kim
  */
@@ -19,32 +21,39 @@ public class UserFile implements Serializable {
      * This constructor creates a new User and creates a new Album that
      * contains the stock photos for the program. Saves the user with
      * the specified path.
+     * 
      * @param username
      * @param path
      */
     public UserFile(String username, String path) {
         this.username = username;
         this.path = path;
-    
+
         try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(path))) {
-            
+
             User user = new User(username);
             Album album = user.createAlbum("stock");
-            album.addPhoto(new Photo(Paths.get("photo87/data/bambi.png").toAbsolutePath().toString()), user);
-            album.addPhoto(new Photo(Paths.get("photo87/data/bluejay.png").toAbsolutePath().toString()), user);
-            album.addPhoto(new Photo(Paths.get("photo87/data/beautifulsea.png").toAbsolutePath().toString()), user); 
-            album.addPhoto(new Photo(Paths.get("photo87/data/bunnycat.png").toAbsolutePath().toString()), user);
-            album.addPhoto(new Photo(Paths.get("photo87/data/roundbird.png").toAbsolutePath().toString()), user);
-            album.addPhoto(new Photo(Paths.get("photo87/data/naples.png").toAbsolutePath().toString()), user);
+
+            // Use absolute paths to ensure files are found
+            String basePath = System.getProperty("user.dir");
+            album.addPhoto(new Photo(Paths.get(basePath, "data", "bambi.png").toString()), user);
+            album.addPhoto(new Photo(Paths.get(basePath, "data", "bluejay.png").toString()), user);
+            album.addPhoto(new Photo(Paths.get(basePath, "data", "beautifulsea.png").toString()), user);
+            album.addPhoto(new Photo(Paths.get(basePath, "data", "bunnycat.png").toString()), user);
+            album.addPhoto(new Photo(Paths.get(basePath, "data", "roundbird.png").toString()), user);
+            album.addPhoto(new Photo(Paths.get(basePath, "data", "naples.png").toString()), user);
             out.writeObject(user);
 
+            System.out.println("Successfully created stock user with " + album.getPhotos().size() + " photos");
+
         } catch (IOException e) {
+            System.err.println("Error creating UserFile for " + username + ": " + e.getMessage());
             e.printStackTrace();
         }
     }
 
     /**
-     * Saves the user. 
+     * Saves the user.
      */
     public void save(User user) throws IOException {
         try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(path))) {
@@ -53,5 +62,5 @@ public class UserFile implements Serializable {
             e.printStackTrace();
             throw e;
         }
-    }      
+    }
 }
